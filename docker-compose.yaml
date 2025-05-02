@@ -1,0 +1,15 @@
+services:
+  postgres:
+    container_name: postgres-cinema
+    image: 'postgres:17'
+    environment:
+      POSTGRES_DB: cinema
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./data:/var/lib/postgresql/data  
+
+
+
