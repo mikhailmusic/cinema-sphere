@@ -88,4 +88,56 @@ public class MovieDto {
     public LocalDate getEndTime() {
         return endTime;
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setAgeRating(String ageRating) {
+        this.ageRating = ageRating;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setStartTime(LocalDate startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(LocalDate endTime) {
+        this.endTime = endTime;
+    }
 }
