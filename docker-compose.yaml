@@ -9,7 +9,31 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - ./data:/var/lib/postgresql/data  
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - cinema-network
 
+  backend:
+    container_name: cinema-backend
+    build:
+      context: ./cinema-backend
+      dockerfile: Dockerfile 
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/cinema
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_DATASOURCE_DRIVER-CLASS-NAME: org.postgresql.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - cinema-network
 
+networks:
+  cinema-network:
+    driver: bridge
 
+volumes:
+  postgres_data:
