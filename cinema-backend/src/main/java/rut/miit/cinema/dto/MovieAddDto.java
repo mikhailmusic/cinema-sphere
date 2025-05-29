@@ -1,132 +1,68 @@
 package rut.miit.cinema.dto;
 
-import java.time.LocalDate;
-
 public class MovieAddDto {
-    private String title;
-    private int duration;
-    private LocalDate releaseDate;
-    private String director;
-    private String imageUrl;
-    private String language;
-    private String country;
-    private String description;
-    private String ageRating;
-    private String status;
-    private LocalDate startTime;
-    private LocalDate endTime;
+    private Integer languageId;
+    private Integer genreId;
 
-    public MovieAddDto(String title, int duration, LocalDate releaseDate, String director, String imageUrl, String language, String country, String description, String ageRating, String status, LocalDate startTime, LocalDate endTime) {
+    private String title;
+    private Integer duration;
+    private Integer releaseYear;
+    private String director;
+    private String image;
+    private String description;
+    private Integer ageRating;
+    private String movieStatus;
+
+    public MovieAddDto(Integer languageId, Integer genreId, String title, Integer duration, Integer releaseYear, String director, String image, String description, Integer ageRating, String movieStatus) {
+        this.languageId = languageId;
+        this.genreId = genreId;
         this.title = title;
         this.duration = duration;
-        this.releaseDate = releaseDate;
+        this.releaseYear = releaseYear;
         this.director = director;
-        this.imageUrl = imageUrl;
-        this.language = language;
-        this.country = country;
+        this.image = image;
         this.description = description;
         this.ageRating = ageRating;
-        this.status = status;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.movieStatus = movieStatus;
     }
 
-    protected MovieAddDto() {
+    public Integer getLanguageId() {
+        return languageId;
+    }
+
+    public Integer getGenreId() {
+        return genreId;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public int getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 
-    public LocalDate getReleaseDate() {
-        return releaseDate;
+    public Integer getReleaseYear() {
+        return releaseYear;
     }
 
     public String getDirector() {
         return director;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public String getCountry() {
-        return country;
+    public String getImage() {
+        return image;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public String getAgeRating() {
+    public Integer getAgeRating() {
         return ageRating;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public LocalDate getStartTime() {
-        return startTime;
-    }
-
-    public LocalDate getEndTime() {
-        return endTime;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public void setReleaseDate(LocalDate releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    public void setDirector(String director) {
-        this.director = director;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setAgeRating(String ageRating) {
-        this.ageRating = ageRating;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public void setStartTime(LocalDate startTime) {
-        this.startTime = startTime;
-    }
-
-    public void setEndTime(LocalDate endTime) {
-        this.endTime = endTime;
+    public String getMovieStatus() {
+        return movieStatus;
     }
 }

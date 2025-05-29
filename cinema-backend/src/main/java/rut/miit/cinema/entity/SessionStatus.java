@@ -1,8 +1,7 @@
 package rut.miit.cinema.entity;
 
-public enum Status {
-    PLANNED,
+public enum SessionStatus {
     ACTIVE,
-    ARCHIVED,
+    CANCELLED,
     DELETED
 }

@@ -5,7 +5,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import rut.miit.cinema.entity.Movie;
-import rut.miit.cinema.entity.Status;
+import rut.miit.cinema.entity.MovieStatus;
 import rut.miit.cinema.repository.MovieRepository;
 
 import java.time.LocalDate;
@@ -24,9 +24,9 @@ public class MovieRepositoryImpl extends BaseRepository<Movie, Integer> implemen
     }
 
     @Override
-    public List<Movie> findByStatuses(Set<Status> statuses) {
-        return entityManager.createQuery("SELECT m FROM Movie m WHERE m.status IN :statuses", Movie.class)
-                .setParameter("statuses", statuses).getResultList();
+    public List<Movie> findByStatuses(Set<MovieStatus> movieStatuses) {
+        return entityManager.createQuery("SELECT m FROM Movie m WHERE m.movieStatus IN :statuses", Movie.class)
+                .setParameter("statuses", movieStatuses).getResultList();
     }
 
     @Override
@@ -34,21 +34,6 @@ public class MovieRepositoryImpl extends BaseRepository<Movie, Integer> implemen
         return entityManager.createQuery(
                 "SELECT m FROM Movie m WHERE LOWER(m.title) LIKE LOWER(CONCAT('%', :keyword, '%'))", Movie.class)
                 .setParameter("keyword", keyword).getResultList();
-    }
-
-    @Override
-    public List<Movie> findMoviesBetweenDates(LocalDate from, LocalDate to, Set<Status> statuses) {
-        TypedQuery<Movie> query = entityManager.createQuery(
-                "SELECT m FROM Movie m " +
-                        "WHERE m.status IN :statuses " +
-                        "AND m.startTime <= :to " +
-                        "AND m.endTime >= :from", Movie.class
-        );
-        query.setParameter("from", from);
-        query.setParameter("to", to);
-        query.setParameter("statuses", statuses);
-
-        return query.getResultList();
     }
 
 }

@@ -44,7 +44,7 @@ public class MovieController {
     }
 
     @GetMapping("/week")
-    public List<MovieDto> getWeeklyByStatus(@RequestParam("status") String status) {
-        return movieService.weeklyMoviesByStatus(status);
+    public List<MovieDto> getWeeklyByStatus(@RequestParam("movieStatus") String movieStatus) {
+        return movieService.weeklyMoviesByStatus(movieStatus);
     }
 }

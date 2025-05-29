@@ -2,40 +2,39 @@ package rut.miit.cinema.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.util.List;
+
 
 @Entity
 @Table(name = "movies")
 public class Movie extends BaseEntity {
     private String title;
     private int duration;
-    private LocalDate releaseDate;
+    private int releaseYear;
     private String director;
-    private String imageUrl;
-    private String language;
-    private String country;
-    private String  description;
-    private String ageRating;
-    private Status status;
-    private LocalDate startTime;
-    private LocalDate endTime;
+    private String imageKey;
+    private String description;
+    private int ageRating;
+    private Language language;
+    private Genre genre;
+    private MovieStatus movieStatus;
+    private List<Session> sessionList;
 
-    public Movie(String title, int duration, LocalDate releaseDate, String director, String imageUrl, String language, String country, String description, String ageRating, Status status, LocalDate startTime, LocalDate endTime) {
+    public Movie(String title, int duration, int releaseYear, String director, String imageKey, String description, int ageRating, Language language, Genre genre, MovieStatus movieStatus) {
         this.title = title;
         this.duration = duration;
-        this.releaseDate = releaseDate;
+        this.releaseYear = releaseYear;
         this.director = director;
-        this.imageUrl = imageUrl;
-        this.language = language;
-        this.country = country;
+        this.imageKey = imageKey;
         this.description = description;
         this.ageRating = ageRating;
-        this.status = status;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.language = language;
+        this.genre = genre;
+        this.movieStatus = movieStatus;
     }
 
-    protected Movie(){}
+    protected Movie() {
+    }
 
 
     @Column(name = "title", nullable = false)
@@ -48,9 +47,9 @@ public class Movie extends BaseEntity {
         return duration;
     }
 
-    @Column(name = "release_date", nullable = false)
-    public LocalDate getReleaseDate() {
-        return releaseDate;
+    @Column(name = "release_year", nullable = false)
+    public int getReleaseYear() {
+        return releaseYear;
     }
 
     @Column(name = "director", length = 100)
@@ -58,19 +57,9 @@ public class Movie extends BaseEntity {
         return director;
     }
 
-    @Column(name = "image_url", nullable = false)
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    @Column(name = "language", nullable = false, length = 50)
-    public String getLanguage() {
-        return language;
-    }
-
-    @Column(name = "country", length = 100)
-    public String getCountry() {
-        return country;
+    @Column(name = "image_key", nullable = false)
+    public String getImageKey() {
+        return imageKey;
     }
 
     @Column(name = "description", columnDefinition = "TEXT")
@@ -78,25 +67,33 @@ public class Movie extends BaseEntity {
         return description;
     }
 
-    @Column(name = "age_rating", nullable = false, length = 7)
-    public String getAgeRating() {
+    @Column(name = "age_rating", nullable = false)
+    public int getAgeRating() {
         return ageRating;
     }
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "language_id", nullable = false)
+    public Language getLanguage() {
+        return language;
+    }
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "genre_id", nullable = false)
+    public Genre getGenre() {
+        return genre;
+    }
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    public Status getStatus() {
-        return status;
+    @Column(name = "movie_status", nullable = false)
+    public MovieStatus getMovieStatus() {
+        return movieStatus;
     }
 
-    @Column(name = "start_time", nullable = false)
-    public LocalDate getStartTime() {
-        return startTime;
-    }
 
-    @Column(name = "end_time", nullable = false)
-    public LocalDate getEndTime() {
-        return endTime;
+    @OneToMany(mappedBy = "movie")
+    public List<Session> getSessionList() {
+        return sessionList;
     }
 
     public void setTitle(String title) {
@@ -107,43 +104,39 @@ public class Movie extends BaseEntity {
         this.duration = duration;
     }
 
-    public void setReleaseDate(LocalDate releaseDate) {
-        this.releaseDate = releaseDate;
+    public void setReleaseYear(int releaseYear) {
+        this.releaseYear = releaseYear;
     }
 
     public void setDirector(String director) {
         this.director = director;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageKey(String imageKey) {
+        this.imageKey = imageKey;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage(Language language) {
         this.language = language;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setGenre(Genre genre) {
+        this.genre = genre;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setAgeRating(String ageRating) {
+    public void setAgeRating(int ageRating) {
         this.ageRating = ageRating;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setMovieStatus(MovieStatus movieStatus) {
+        this.movieStatus = movieStatus;
     }
 
-    public void setStartTime(LocalDate startTime) {
-        this.startTime = startTime;
-    }
-
-    public void setEndTime(LocalDate endTime) {
-        this.endTime = endTime;
+    protected void setSessionList(List<Session> sessionList) {
+        this.sessionList = sessionList;
     }
 }
