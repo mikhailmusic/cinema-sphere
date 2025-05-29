@@ -2,13 +2,11 @@ package rut.miit.cinema.repository.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import rut.miit.cinema.entity.Movie;
 import rut.miit.cinema.entity.MovieStatus;
 import rut.miit.cinema.repository.MovieRepository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 

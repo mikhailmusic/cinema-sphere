@@ -6,7 +6,6 @@ import rut.miit.cinema.repository.generic.CreateRepository;
 import rut.miit.cinema.repository.generic.ReadRepository;
 import rut.miit.cinema.repository.generic.UpdateRepository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
