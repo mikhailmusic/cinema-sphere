@@ -19,7 +19,7 @@ public class LanguageController {
     }
 
     @GetMapping
-    public List<LanguageDto> getAllLanguages() {
+    public List<LanguageDto> allLanguages() {
         return languageService.findAllLanguages();
     }
 

@@ -28,13 +28,18 @@ public class MovieController {
         movieService.updateMovieInfo(id, movieDto);
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteMovie(@PathVariable Integer id) {
+        movieService.logicRemoveMovieInfo(id);
+    }
+
     @GetMapping("/{id}")
-    public MovieDto getMovieById(@PathVariable Integer id) {
+    public MovieDto movieById(@PathVariable Integer id) {
         return movieService.getMovieDetails(id);
     }
 
     @GetMapping
-    public List<MovieDto> getAllMovies() {
+    public List<MovieDto> allMovies() {
         return movieService.findAllMovies();
     }
 
@@ -44,7 +49,7 @@ public class MovieController {
     }
 
     @GetMapping("/week")
-    public List<MovieDto> getWeeklyByStatus(@RequestParam("movieStatus") String movieStatus) {
+    public List<MovieDto> weeklyByStatus(@RequestParam("movieStatus") String movieStatus) {
         return movieService.weeklyMoviesByStatus(movieStatus);
     }
 }

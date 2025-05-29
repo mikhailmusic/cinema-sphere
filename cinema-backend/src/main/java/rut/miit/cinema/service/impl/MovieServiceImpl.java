@@ -13,9 +13,9 @@ import rut.miit.cinema.repository.MovieRepository;
 import rut.miit.cinema.repository.SessionRepository;
 import rut.miit.cinema.service.MovieService;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -84,6 +84,13 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public void logicRemoveMovieInfo(Integer id) {
+        Movie movie = movieRepository.findById(id).orElseThrow(() -> new NotFoundException(Movie.class, id));
+        movie.setMovieStatus(MovieStatus.DELETED);
+        movieRepository.save(movie);
+    }
+
+    @Override
     public MovieDto getMovieDetails(Integer id) {
         Movie movie = movieRepository.findById(id).orElseThrow(() -> new NotFoundException(Movie.class, id));
         return convertToDto(movie);
@@ -91,7 +98,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<MovieDto> findAllMovies() {
-        List<Movie> movies = movieRepository.findAll();
+        List<Movie> movies = movieRepository.findByStatuses(Set.of(MovieStatus.PLANNED, MovieStatus.ACTIVE, MovieStatus.ARCHIVED));
         return movies.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 

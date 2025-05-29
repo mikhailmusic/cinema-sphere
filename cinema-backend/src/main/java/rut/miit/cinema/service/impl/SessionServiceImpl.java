@@ -12,6 +12,7 @@ import rut.miit.cinema.repository.SessionRepository;
 import rut.miit.cinema.service.SessionService;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,11 +38,12 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public List<SessionDto> findAllSessions() {
-        return sessionRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
+        List<Session> sessionList = sessionRepository.findByStatusIn(Set.of(SessionStatus.ACTIVE, SessionStatus.CANCELLED));
+        return sessionList.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     @Override
-    public void createSession(SessionAddDto dto) {
+    public void addSessionInfo(SessionAddDto dto) {
         Movie movie = movieRepository.findById(dto.getMovieId()).orElseThrow(() -> new NotFoundException(Movie.class, dto.getMovieId()));
         Hall hall = hallRepository.findById(dto.getHallId()).orElseThrow(() -> new NotFoundException(Hall.class, dto.getHallId()));
 
@@ -50,12 +52,19 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public void updateSession(Integer id, SessionAddDto dto) {
+    public void updateSessionInfo(Integer id, SessionAddDto dto) {
         Session session = sessionRepository.findById(id).orElseThrow(() -> new NotFoundException(Session.class, id));
         Hall hall = hallRepository.findById(dto.getHallId()).orElseThrow(() -> new NotFoundException(Hall.class, dto.getHallId()));
         session.setHall(hall);
         session.setStartTime(dto.getStartTime());
         session.setStatus(SessionStatus.valueOf(dto.getStatus()));
+        sessionRepository.save(session);
+    }
+
+    @Override
+    public void logicRemoveSessionInfo(Integer id) {
+        Session session = sessionRepository.findById(id).orElseThrow(() -> new NotFoundException(Session.class, id));
+        session.setStatus(SessionStatus.DELETED);
         sessionRepository.save(session);
     }
 

@@ -19,7 +19,7 @@ public class GenreController {
     }
 
     @GetMapping
-    public List<GenreDto> getAllGenres() {
+    public List<GenreDto> allGenres() {
         return genreService.findAllGenres();
     }
 

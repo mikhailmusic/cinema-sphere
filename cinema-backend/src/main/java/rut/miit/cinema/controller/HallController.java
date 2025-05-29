@@ -19,7 +19,7 @@ public class HallController {
     }
 
     @GetMapping
-    public List<HallDto> getAllHalls() {
+    public List<HallDto> allHalls() {
         return hallService.findAllHalls();
     }
 
