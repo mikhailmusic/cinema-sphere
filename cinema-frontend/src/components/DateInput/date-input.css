@@ -1,0 +1,15 @@
+.date-input-wrapper {
+  position: relative;
+  
+}
+
+.calendar-popup {
+  position: absolute;
+  
+top: calc(100% + 0.5rem);
+  z-index: 10;
+
+  border-radius: 8px;
+  width: 100%;
+}
+

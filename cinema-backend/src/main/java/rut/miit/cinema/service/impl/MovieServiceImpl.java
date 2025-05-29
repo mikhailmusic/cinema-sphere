@@ -2,15 +2,14 @@ package rut.miit.cinema.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rut.miit.cinema.dto.MovieAddDto;
-import rut.miit.cinema.dto.MovieDto;
-import rut.miit.cinema.dto.SessionDto;
+import rut.miit.cinema.dto.*;
 import rut.miit.cinema.entity.*;
 import rut.miit.cinema.exception.NotFoundException;
 import rut.miit.cinema.repository.GenreRepository;
 import rut.miit.cinema.repository.LanguageRepository;
 import rut.miit.cinema.repository.MovieRepository;
 import rut.miit.cinema.repository.SessionRepository;
+import rut.miit.cinema.service.FileService;
 import rut.miit.cinema.service.MovieService;
 
 import java.time.LocalDateTime;
@@ -25,6 +24,16 @@ public class MovieServiceImpl implements MovieService {
     private GenreRepository genreRepository;
     private LanguageRepository languageRepository;
     private SessionRepository sessionRepository;
+    private FileService fileService;
+
+    @Autowired
+    public MovieServiceImpl(MovieRepository movieRepository, GenreRepository genreRepository, LanguageRepository languageRepository, SessionRepository sessionRepository, FileService fileService) {
+        this.movieRepository = movieRepository;
+        this.genreRepository = genreRepository;
+        this.languageRepository = languageRepository;
+        this.sessionRepository = sessionRepository;
+        this.fileService = fileService;
+    }
 
     @Override
     public List<MovieDto> weeklyMoviesByStatus(String status) {
@@ -47,31 +56,36 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void addNewMovie(MovieAddDto dto) {
-        Language language = languageRepository.findById(dto.getLanguageId())
-                .orElseThrow(() -> new NotFoundException(Language.class, dto.getLanguageId()));
-        Genre genre = genreRepository.findById(dto.getGenreId())
-                .orElseThrow(() -> new NotFoundException(Genre.class, dto.getGenreId()));
-
+    public MovieDto addNewMovie(MovieAddDto dto) {
         Movie movie = new Movie(dto.getTitle(), dto.getDuration(), dto.getReleaseYear(), dto.getDirector(),
-                dto.getImage(), dto.getDescription(), dto.getAgeRating(), language, genre,
-                MovieStatus.valueOf(dto.getMovieStatus())
+                dto.getImage(), dto.getDescription(), dto.getAgeRating(), getLanguage(dto.getLanguageId()),
+                getGenre(dto.getGenreId()), MovieStatus.valueOf(dto.getMovieStatus())
         );
         movieRepository.save(movie);
+        return convertToDto(movie);
     }
 
     @Override
-    public void updateMovieInfo(Integer id, MovieAddDto dto) {
+    public MovieDto addNewMovie(MovieAddNoImageDto dto, ImageDto imageDto) {
+        String imageKey = fileService.addImage(imageDto);
+        Movie movie = new Movie(dto.getTitle(), dto.getDuration(), dto.getReleaseYear(), dto.getDirector(),
+                imageKey, dto.getDescription(), dto.getAgeRating(), getLanguage(dto.getLanguageId()),
+                getGenre(dto.getGenreId()), MovieStatus.valueOf(dto.getMovieStatus())
+        );
+        movieRepository.save(movie);
+        return convertToDto(movie);
+    }
+
+    @Override
+    public MovieDto updateMovieInfo(Integer id, MovieAddDto dto) {
         Movie movie = movieRepository.findById(id).orElseThrow(() -> new NotFoundException(Movie.class, id));
-        Language language = languageRepository.findById(dto.getLanguageId()).orElseThrow(() -> new NotFoundException(Language.class, dto.getLanguageId()));
-        Genre genre = genreRepository.findById(dto.getGenreId()).orElseThrow(() -> new NotFoundException(Genre.class, dto.getGenreId()));
 
         movie.setTitle(dto.getTitle());
         movie.setDuration(dto.getDuration());
         movie.setReleaseYear(dto.getReleaseYear());
         movie.setDirector(dto.getDirector());
-        movie.setLanguage(language);
-        movie.setGenre(genre);
+        movie.setLanguage(getLanguage(dto.getLanguageId()));
+        movie.setGenre(getGenre(dto.getGenreId()));
         movie.setDescription(dto.getDescription());
         movie.setAgeRating(dto.getAgeRating());
         movie.setMovieStatus(MovieStatus.valueOf(dto.getMovieStatus()));
@@ -81,6 +95,30 @@ public class MovieServiceImpl implements MovieService {
         }
 
         movieRepository.save(movie);
+        return convertToDto(movie);
+
+    }
+
+    @Override
+    public MovieDto updateMovieInfo(Integer id, MovieAddNoImageDto dto, ImageDto imageDto) {
+        Movie movie = movieRepository.findById(id).orElseThrow(() -> new NotFoundException(Movie.class, id));
+
+        movie.setTitle(dto.getTitle());
+        movie.setDuration(dto.getDuration());
+        movie.setReleaseYear(dto.getReleaseYear());
+        movie.setDirector(dto.getDirector());
+        movie.setLanguage(getLanguage(dto.getLanguageId()));
+        movie.setGenre(getGenre(dto.getGenreId()));
+        movie.setDescription(dto.getDescription());
+        movie.setAgeRating(dto.getAgeRating());
+        movie.setMovieStatus(MovieStatus.valueOf(dto.getMovieStatus()));
+
+        if (imageDto != null && imageDto.getData() != null && imageDto.getData().length > 0) {
+            String imageKey = fileService.addImage(imageDto);
+            movie.setImageKey(imageKey);
+        }
+        movieRepository.save(movie);
+        return convertToDto(movie);
     }
 
     @Override
@@ -116,20 +154,10 @@ public class MovieServiceImpl implements MovieService {
         );
     }
 
-    @Autowired
-    public void setMovieRepository(MovieRepository movieRepository) {
-        this.movieRepository = movieRepository;
+    private Language getLanguage(Integer id) {
+        return languageRepository.findById(id).orElseThrow(() -> new NotFoundException(Language.class, id));
     }
-    @Autowired
-    public void setGenreRepository(GenreRepository genreRepository) {
-        this.genreRepository = genreRepository;
-    }
-    @Autowired
-    public void setLanguageRepository(LanguageRepository languageRepository) {
-        this.languageRepository = languageRepository;
-    }
-    @Autowired
-    public void setSessionRepository(SessionRepository sessionRepository) {
-        this.sessionRepository = sessionRepository;
+    private Genre getGenre(Integer id) {
+        return genreRepository.findById(id).orElseThrow(() -> new NotFoundException(Genre.class, id));
     }
 }

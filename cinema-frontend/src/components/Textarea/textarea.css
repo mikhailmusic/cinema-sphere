@@ -1,0 +1,11 @@
+.text-area-field {
+  font-family: inherit;
+  border: 1px solid var(--secondary-color);
+  border-radius: 4px;
+  background-color: var(--background-color);
+
+  resize: vertical;
+  height: auto;
+  min-height: 5.125rem;
+
+}

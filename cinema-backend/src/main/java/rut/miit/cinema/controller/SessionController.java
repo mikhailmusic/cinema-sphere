@@ -23,19 +23,23 @@ public class SessionController {
         return sessionService.findAllSessions();
     }
 
-
     @PostMapping
-    public void createSession(@RequestBody SessionAddDto dto) {
-        sessionService.createSession(dto);
+    public void addSession(@RequestBody SessionAddDto dto) {
+        sessionService.addSessionInfo(dto);
     }
 
     @PutMapping("/{id}")
     public void updateSession(@PathVariable Integer id, @RequestBody SessionAddDto dto) {
-        sessionService.updateSession(id, dto);
+        sessionService.updateSessionInfo(id, dto);
     }
 
     @GetMapping("/{id}")
     public SessionDto getSession(@PathVariable Integer id) {
         return sessionService.findById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteSession(@PathVariable Integer id) {
+        sessionService.logicRemoveSessionInfo(id);
     }
 }

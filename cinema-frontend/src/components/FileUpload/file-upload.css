@@ -1,0 +1,38 @@
+.file-upload-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-name {
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.image-preview-wrapper {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.image-preview {
+  height: 100px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: var(--shadow-small);
+  border: 2px solid var(--secondary-color);
+}
+
+@media (max-width: 480px) {
+  .image-preview {
+    display: none;
+  }
+}
