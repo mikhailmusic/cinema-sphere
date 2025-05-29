@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import BaseModal from "./BaseModal";
 import Input from "../Input/Input";
 import Dropdown from "../Dropdown/Dropdown";
@@ -8,7 +8,7 @@ import Button from "../Button/Button";
 
 import type { MovieAddDto, LanguageDto, GenreDto, MovieStatus, MovieDto } from "../../api/types";
 import { movieStatusOptions } from "../../api/types";
-import { updateMovie, addMovie, getAllLanguages, getAllGenres } from "../../api";
+import { updateMovie, addMovie, getAllLanguages, getAllGenres, getImageUrl } from "../../api";
 
 interface Props {
   movie?: MovieDto | null;
@@ -29,7 +29,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
   const [genreId, setGenreId] = useState(-1);
   const [movieStatus, setMovieStatus] = useState<MovieStatus | "">("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState<File | null>(null);
+  const [image, setImage] = useState<File | string | null>(null);
 
   const [errors, setErrors] = useState<{
     title?: string;
@@ -66,7 +66,8 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
       setGenreId(gen?.id ?? -1);
       setMovieStatus(movie.movieStatus as MovieStatus);
       setDescription(movie.description);
-      setImage(null);
+
+      setImage(getImageUrl(movie.image) ?? null);
     } else {
       setTitle("");
       setDirector("");
@@ -83,30 +84,29 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
     setErrors({});
   }, [movie, languages, genres]);
 
-  const previewImageUrl = useMemo(() => {
-    if (image instanceof File) {
-      return URL.createObjectURL(image);
-    }
-    return movie?.image ?? "";
-  }, [image, movie?.image]);
-
   useEffect(() => {
-    return () => {
-      if (image instanceof File) {
-        URL.revokeObjectURL(previewImageUrl);
-      }
-    };
-  }, [previewImageUrl, image]);
+    let objectUrl: string | null = null;
+    if (image instanceof File) {
+      objectUrl = URL.createObjectURL(image);
+      return () => {
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+      };
+    }
+  }, [image]);
 
   const validate = (): boolean => {
     const newErrors: typeof errors = {};
 
-    if (languageId === -1) newErrors.languageId = "Пожалуйста, выберите язык.";
-    if (genreId === -1) newErrors.genreId = "Пожалуйста, выберите жанр.";
-    if (!title.trim()) newErrors.title = "Введите название фильма.";
-    if (duration <= 0) newErrors.duration = "Введите корректную длительность.";
-    if (ageRating < 0) newErrors.ageRating = "Возрастной рейтинг не может быть отрицательным.";
-    if (!movieStatus) newErrors.movieStatus = "Пожалуйста, выберите статус фильма.";
+    if (languageId === -1) newErrors.languageId = "Пожалуйста, выберите язык";
+    if (genreId === -1) newErrors.genreId = "Пожалуйста, выберите жанр";
+    if (!title.trim()) newErrors.title = "Введите название фильма";
+    if (duration <= 0) newErrors.duration = "Введите корректную длительность";
+    if (ageRating < 0) newErrors.ageRating = "Возрастной рейтинг не может быть отрицательным";
+    if (!movieStatus) newErrors.movieStatus = "Пожалуйста, выберите статус фильма";
+
+    if (!image) {
+      newErrors.image = "Пожалуйста, загрузите изображение";
+    }
 
     setErrors(newErrors);
 
@@ -128,7 +128,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
       description: description.trim(),
       ageRating,
       movieStatus,
-      image: image ?? null
+      image: image instanceof File ? image : null
     };
 
     try {
@@ -242,8 +242,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
           error={errors.description}
         />
 
-        <FileUpload label="Постер" file={previewImageUrl} onChange={setImage} />
-        {errors.image && <div className="error-message">{errors.image}</div>}
+        <FileUpload label="Постер" file={image} onChange={setImage} error={errors.image} />
 
         <div className="add-movie-buttons">
           <Button onClick={onClose}>Отменить</Button>

@@ -8,9 +8,10 @@ type FileUploadProps = {
   onChange: (file: File | null) => void;
   accept?: string;
   required?: boolean;
+  error?: string;
 };
 
-export default function FileUpload({ label, file, onChange, accept = "image/*", required = false }: FileUploadProps) {
+export default function FileUpload({ label, file, onChange, accept = "image/*", required = false, error }: FileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string>("");
@@ -46,11 +47,13 @@ export default function FileUpload({ label, file, onChange, accept = "image/*", 
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+    setPreview(null);
+    setFileName("");
     onChange(null);
   };
 
   return (
-    <div className="input-wrapper">
+    <div className={`input-wrapper ${error ? "has-error" : ""}`}>
       {label && <label className="input-label">{label}</label>}
 
       <div className="file-upload-wrapper">
@@ -64,26 +67,20 @@ export default function FileUpload({ label, file, onChange, accept = "image/*", 
           style={{ display: "none" }}
         />
         <Button onClick={handleClick}>Выберите файл</Button>
-        {fileName && (
-          <>
-            <span className="file-name">{fileName}</span>
-            <button type="button" className="clear-file-button" onClick={handleClear} aria-label="Очистить файл">
-              <Close />
-            </button>
-          </>
-        )}
+
+        {fileName && <span className="file-name">{fileName}</span>}
       </div>
 
       {preview && (
         <div className="image-preview-wrapper">
           <img src={preview} alt="Превью" className="image-preview" />
-          {!fileName && (
-            <button type="button" className="clear-file-button" onClick={handleClear} aria-label="Очистить изображение">
-              <Close />
-            </button>
-          )}
+          <button type="button" className="clear-file-button" onClick={handleClear} aria-label="Очистить изображение">
+            <Close />
+          </button>
         </div>
       )}
+
+      {error && <div className="input-error-message">{error}</div>}
     </div>
   );
 }
