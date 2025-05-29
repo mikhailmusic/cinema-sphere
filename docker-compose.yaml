@@ -3,15 +3,31 @@ services:
     container_name: postgres-cinema
     image: 'postgres:17'
     environment:
-      POSTGRES_DB: cinema
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
+      POSTGRES_DB: $PGDATABASE
+      POSTGRES_USER: $PGUSER
+      POSTGRES_PASSWORD: $PGPASSWORD
     ports:
-      - '5432:5432'
+      - $PGPORT:$PGPORT
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - cinema-network
+  
+  minio:
+    container_name: minio
+    image: minio/minio
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "${MINIO_PORT}:${MINIO_PORT}" # S3 API
+      - "${MINIO_CONSOLE_PORT}:${MINIO_CONSOLE_PORT}" # Web UI
+    volumes:
+      - ./minio-data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - cinema-network
+
 
   backend:
     container_name: cinema-backend
@@ -19,15 +35,21 @@ services:
       context: ./cinema-backend
       dockerfile: Dockerfile 
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/cinema
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-      SPRING_DATASOURCE_DRIVER-CLASS-NAME: org.postgresql.Driver
-      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_DATASOURCE_URL: $DATABASE_URL
+      SPRING_DATASOURCE_USERNAME: $PGUSER
+      SPRING_DATASOURCE_PASSWORD: $PGPASSWORD
+      SPRING_DATASOURCE_DRIVER-CLASS-NAME: $PGDRIVER
+      SPRING_JPA_HIBERNATE_DDL_AUTO: $DDL_AUTO
+
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
     ports:
-      - "8080:8080"
+      - $SERVER_PORT:$SERVER_PORT
     depends_on:
       - postgres
+      - minio
     networks:
       - cinema-network
 
