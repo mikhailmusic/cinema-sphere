@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import BaseModal from "./BaseModal";
 import Input from "../Input/Input";
 import Dropdown from "../Dropdown/Dropdown";
@@ -13,25 +13,36 @@ import { updateMovie, addMovie, getAllLanguages, getAllGenres } from "../../api"
 interface Props {
   movie?: MovieDto | null;
   onClose: () => void;
-onSaved: (movie: MovieDto) => void;
+  onSaved: (movie: MovieDto) => void;
 }
 
 export default function MovieFormModal({ movie = null, onClose, onSaved }: Props) {
   const [languages, setLanguages] = useState<LanguageDto[]>([]);
   const [genres, setGenres] = useState<GenreDto[]>([]);
 
-  const [form, setForm] = useState<Omit<MovieAddDto, "image"> & { image: File | null }>({
-    languageId: -1,
-    genreId: -1,
-    title: "",
-    duration: 0,
-    releaseYear: new Date().getFullYear(),
-    director: "",
-    description: "",
-    ageRating: 0,
-    movieStatus: "" as MovieStatus | "",
-    image: null,
-  });
+  const [title, setTitle] = useState("");
+  const [director, setDirector] = useState("");
+  const [duration, setDuration] = useState(0);
+  const [releaseYear, setReleaseYear] = useState(new Date().getFullYear());
+  const [ageRating, setAgeRating] = useState(0);
+  const [languageId, setLanguageId] = useState(-1);
+  const [genreId, setGenreId] = useState(-1);
+  const [movieStatus, setMovieStatus] = useState<MovieStatus | "">("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState<File | null>(null);
+
+  const [errors, setErrors] = useState<{
+    title?: string;
+    director?: string;
+    duration?: string;
+    releaseYear?: string;
+    ageRating?: string;
+    languageId?: string;
+    genreId?: string;
+    movieStatus?: string;
+    description?: string;
+    image?: string;
+  }>({});
 
   useEffect(() => {
     (async () => {
@@ -46,109 +57,95 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
       const lang = languages.find((l) => l.name === movie.language);
       const gen = genres.find((g) => g.name === movie.genre);
 
-      setForm({
-        languageId: lang?.id ?? -1,
-        genreId: gen?.id ?? -1,
-        title: movie.title,
-        duration: movie.duration,
-        releaseYear: movie.releaseYear,
-        director: movie.director,
-        description: movie.description,
-        ageRating: movie.ageRating,
-        movieStatus: movie.movieStatus as MovieStatus,
-        image: null,
-      });
+      setTitle(movie.title);
+      setDirector(movie.director);
+      setDuration(movie.duration);
+      setReleaseYear(movie.releaseYear);
+      setAgeRating(movie.ageRating);
+      setLanguageId(lang?.id ?? -1);
+      setGenreId(gen?.id ?? -1);
+      setMovieStatus(movie.movieStatus as MovieStatus);
+      setDescription(movie.description);
+      setImage(null);
     } else {
-      setForm({
-        languageId: -1,
-        genreId: -1,
-        title: "",
-        duration: 0,
-        releaseYear: new Date().getFullYear(),
-        director: "",
-        description: "",
-        ageRating: 0,
-        movieStatus: "" as MovieStatus | "",
-        image: null,
-      });
+      setTitle("");
+      setDirector("");
+      setDuration(0);
+      setReleaseYear(new Date().getFullYear());
+      setAgeRating(0);
+      setLanguageId(-1);
+      setGenreId(-1);
+      setMovieStatus("");
+      setDescription("");
+      setImage(null);
     }
+
+    setErrors({});
   }, [movie, languages, genres]);
 
-  const handleChange = <K extends keyof typeof form>(field: K, value: typeof form[K]) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  };
-
   const previewImageUrl = useMemo(() => {
-    if (form.image instanceof File) {
-      return URL.createObjectURL(form.image);
+    if (image instanceof File) {
+      return URL.createObjectURL(image);
     }
     return movie?.image ?? "";
-  }, [form.image, movie?.image]);
+  }, [image, movie?.image]);
 
   useEffect(() => {
     return () => {
-      if (form.image instanceof File) {
+      if (image instanceof File) {
         URL.revokeObjectURL(previewImageUrl);
       }
     };
-  }, [previewImageUrl, form.image]);
+  }, [previewImageUrl, image]);
+
+  const validate = (): boolean => {
+    const newErrors: typeof errors = {};
+
+    if (languageId === -1) newErrors.languageId = "Пожалуйста, выберите язык.";
+    if (genreId === -1) newErrors.genreId = "Пожалуйста, выберите жанр.";
+    if (!title.trim()) newErrors.title = "Введите название фильма.";
+    if (duration <= 0) newErrors.duration = "Введите корректную длительность.";
+    if (ageRating < 0) newErrors.ageRating = "Возрастной рейтинг не может быть отрицательным.";
+    if (!movieStatus) newErrors.movieStatus = "Пожалуйста, выберите статус фильма.";
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (form.languageId === -1) {
-      alert("Пожалуйста, выберите язык.");
-      return;
-    }
-    if (form.genreId === -1) {
-      alert("Пожалуйста, выберите жанр.");
-      return;
-    }
-    if (!form.title.trim()) {
-      alert("Введите название фильма.");
-      return;
-    }
-    if (form.duration <= 0) {
-      alert("Введите корректную длительность.");
-      return;
-    }
-    if (form.ageRating < 0) {
-      alert("Возрастной рейтинг не может быть отрицательным.");
-      return;
-    }
-    if (!form.movieStatus) {
-      alert("Пожалуйста, выберите статус фильма.");
-      return;
-    }
+    if (!validate()) return;
 
     const movieDto: MovieAddDto = {
-      languageId: form.languageId,
-      genreId: form.genreId,
-      title: form.title.trim(),
-      duration: form.duration,
-      releaseYear: form.releaseYear,
-      director: form.director.trim(),
-      description: form.description.trim(),
-      ageRating: form.ageRating,
-      movieStatus: form.movieStatus,
-      image: form.image ?? null,
+      languageId,
+      genreId,
+      title: title.trim(),
+      duration,
+      releaseYear,
+      director: director.trim(),
+      description: description.trim(),
+      ageRating,
+      movieStatus,
+      image: image ?? null
     };
 
     try {
-    let savedMovie: MovieDto;
+      let savedMovie: MovieDto;
 
-    if (movie && movie.id) {
-      savedMovie = await updateMovie(movie.id, movieDto);
-    } else {
-      savedMovie = await addMovie(movieDto);
-    }
+      if (movie && movie.id) {
+        savedMovie = await updateMovie(movie.id, movieDto);
+      } else {
+        savedMovie = await addMovie(movieDto);
+      }
 
-    onSaved(savedMovie);
+      onSaved(savedMovie);
     } catch (error) {
       alert("Ошибка при сохранении фильма");
       console.error(error);
     }
-  }
+  };
 
   return (
     <BaseModal onClose={onClose} title={movie ? "Редактировать фильм" : "Новый фильм"}>
@@ -156,16 +153,19 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
         <Input
           name="title"
           label="Название"
-          value={form.title}
-          onChange={(e) => handleChange("title", e.target.value)}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           required
+          error={errors.title}
         />
+
         <Input
           name="director"
           label="Режиссер"
-          value={form.director}
-          onChange={(e) => handleChange("director", e.target.value)}
+          value={director}
+          onChange={(e) => setDirector(e.target.value)}
           required
+          error={errors.director}
         />
 
         <div className="modal-input-group">
@@ -173,20 +173,22 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
             name="duration"
             label="Длительность (мин)"
             type="number"
-            value={form.duration}
-            onChange={(e) => handleChange("duration", Number(e.target.value))}
+            value={duration}
+            onChange={(e) => setDuration(Number(e.target.value))}
             min={1}
             required
+            error={errors.duration}
           />
           <Input
             name="releaseYear"
             label="Год выхода"
             type="number"
-            value={form.releaseYear}
-            onChange={(e) => handleChange("releaseYear", Number(e.target.value))}
+            value={releaseYear}
+            onChange={(e) => setReleaseYear(Number(e.target.value))}
             min={1800}
             max={new Date().getFullYear() + 5}
             required
+            error={errors.releaseYear}
           />
         </div>
 
@@ -194,52 +196,54 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
           name="ageRating"
           label="Возрастной рейтинг"
           type="number"
-          value={form.ageRating}
-          onChange={(e) => handleChange("ageRating", Number(e.target.value))}
+          value={ageRating}
+          onChange={(e) => setAgeRating(Number(e.target.value))}
           min={0}
           required
+          error={errors.ageRating}
         />
 
         <Dropdown
           label="Язык"
           options={languages.map((l) => ({ label: l.name, value: String(l.id) }))}
-          value={form.languageId === -1 ? "" : String(form.languageId)}
-          onChange={(val) => handleChange("languageId", Number(val))}
+          value={languageId === -1 ? "" : String(languageId)}
+          onChange={(value) => setLanguageId(Number(value))}
           placeholder="Выберите язык"
           required
+          error={errors.languageId}
         />
 
         <Dropdown
           label="Жанр"
           options={genres.map((g) => ({ label: g.name, value: String(g.id) }))}
-          value={form.genreId === -1 ? "" : String(form.genreId)}
-          onChange={(val) => handleChange("genreId", Number(val))}
+          value={genreId === -1 ? "" : String(genreId)}
+          onChange={(value) => setGenreId(Number(value))}
           placeholder="Выберите жанр"
           required
+          error={errors.genreId}
         />
 
         <Dropdown
           label="Статус"
           options={movieStatusOptions}
-          value={form.movieStatus}
-          onChange={(val) => handleChange("movieStatus", val as MovieStatus)}
+          value={movieStatus}
+          onChange={(value) => setMovieStatus(value as MovieStatus)}
           placeholder="Выберите статус"
           required
+          error={errors.movieStatus}
         />
 
         <Textarea
           name="description"
           label="Описание"
-          value={form.description}
-          onChange={(e) => handleChange("description", e.target.value)}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           required
+          error={errors.description}
         />
 
-        <FileUpload
-          label="Постер"
-          file={previewImageUrl}
-          onChange={(file) => handleChange("image", file)}
-        />
+        <FileUpload label="Постер" file={previewImageUrl} onChange={setImage} />
+        {errors.image && <div className="error-message">{errors.image}</div>}
 
         <div className="add-movie-buttons">
           <Button onClick={onClose}>Отменить</Button>

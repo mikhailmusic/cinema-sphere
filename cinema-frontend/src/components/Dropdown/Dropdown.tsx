@@ -14,6 +14,7 @@ interface DropdownProps {
   onChange: (value: string) => void;
   placeholder?: string;
   required?: boolean;
+  error?: string;
 }
 
 export default function Dropdown({
@@ -22,7 +23,8 @@ export default function Dropdown({
   value,
   onChange,
   placeholder = "Выберите...",
-  required = false
+  required = false,
+  error = ""
 }: DropdownProps) {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -64,6 +66,7 @@ export default function Dropdown({
         placeholder={placeholder}
         readOnly
         required={required}
+        error={error}
         icon={<ChevronDown className={`dropdown-arrow ${open ? "rotated" : ""}`} />}
         onClick={toggleOpen}
       />

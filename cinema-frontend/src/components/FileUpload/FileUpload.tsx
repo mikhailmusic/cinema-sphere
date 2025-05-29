@@ -10,13 +10,7 @@ type FileUploadProps = {
   required?: boolean;
 };
 
-export default function FileUpload({
-  label,
-  file,
-  onChange,
-  accept = "image/*",
-  required = false,
-}: FileUploadProps) {
+export default function FileUpload({ label, file, onChange, accept = "image/*", required = false }: FileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string>("");
@@ -49,6 +43,9 @@ export default function FileUpload({
   };
 
   const handleClear = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
     onChange(null);
   };
 
@@ -70,13 +67,8 @@ export default function FileUpload({
         {fileName && (
           <>
             <span className="file-name">{fileName}</span>
-            <button
-              type="button"
-              className="clear-file-button"
-              onClick={handleClear}
-              aria-label="Очистить файл"
-            >
-              ×
+            <button type="button" className="clear-file-button" onClick={handleClear} aria-label="Очистить файл">
+              <Close />
             </button>
           </>
         )}
@@ -86,13 +78,8 @@ export default function FileUpload({
         <div className="image-preview-wrapper">
           <img src={preview} alt="Превью" className="image-preview" />
           {!fileName && (
-            <button
-              type="button"
-              className="clear-file-button"
-              onClick={handleClear}
-              aria-label="Очистить изображение"
-            >
-              <Close/>
+            <button type="button" className="clear-file-button" onClick={handleClear} aria-label="Очистить изображение">
+              <Close />
             </button>
           )}
         </div>

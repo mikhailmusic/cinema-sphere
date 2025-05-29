@@ -7,6 +7,7 @@ interface TextareaProps {
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   rows?: number;
   required?: boolean;
+  error?: string;
 }
 
 const Textarea: React.FC<TextareaProps> = ({
@@ -15,19 +16,22 @@ const Textarea: React.FC<TextareaProps> = ({
   value,
   onChange,
   rows = 4,
-  required = false
+  required = false,
+  error = ""
 }) => {
   return (
     <div className="input-wrapper">
-      {label && <label className="input-label">{label}</label>}
+      {label && <label className="input-label" htmlFor={name}>{label}</label>}
       <textarea
-        className="input-field text-area-field"
+        id={name}
         name={name}
+        className={`input-field text-area-field ${error ? "input-error" : ""}`}
         value={value}
         onChange={onChange}
         rows={rows}
         required={required}
       />
+      {error && <span className="input-error-message">{error}</span>}
     </div>
   );
 };

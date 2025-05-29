@@ -17,7 +17,6 @@
     gap: 1rem;
     width: 100%;
     justify-content: center;
-    align-items: center;
 }
 .modal-input-group > .input-wrapper {
   flex: 1;
