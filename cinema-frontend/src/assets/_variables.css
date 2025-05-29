@@ -1,0 +1,129 @@
+/* colors */
+:root {
+  --primary-color: #5c67a3;
+  --secondary-color: #a1c6ea;
+  --background-color: #f9f9fa;
+  --text-color: #2d2d2d;
+  --text-color-light: #f9f9fa;
+  --text-color-muted: #999;
+  --link-color: #4a5aa4;
+  --link-color-alt: #bcc9e4;
+  --error-color: #d64550;
+  --warning-color: #f0c04a;
+  --success-color: #7fb77e;
+
+  --primary-color-hover: #4b568f;
+  --primary-color-active: #3a4373;
+  --primary-color-focus: #7881c0;
+
+  --secondary-color-hover: #91b8db;
+  --secondary-color-active: #7da5c8;
+  --secondary-color-focus: #bcd9f1;
+
+  --link-color-hover: #3d4c91;
+  --link-color-focus: #5c67a3;
+  --link-color-hover-alt: #f9f9fa;
+  --link-color-focus-alt: #f4f5f9;
+
+  --background-color-hover: #efeff1;
+  --background-color-focus: #e2e2e5;
+
+  --btn-danger-bg: #d64550;
+  --btn-danger-bg-hover: #c53843;
+  --btn-danger-bg-active: #a92d39;
+
+  --btn-success-bg: #7fb77e;
+  --btn-success-bg-hover: #6f9e6a;
+  --btn-success-bg-active: #5d885a;
+}
+
+/* typography */
+:root {
+  --font-family-primary: "Arial", sans-serif;
+  --font-family-secondary: "Roboto", sans-serif;
+  --font-size-small: 0.75rem;   /* 12px */
+  --font-size-medium: 0.875rem; /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-large: 1.125rem;  /* 18px */
+  --font-size-xlarge: 1.25rem;  /* 20px */
+  --font-size-xxlarge: 1.5rem;  /* 24px */
+  --line-height-base: 1.5;
+  --font-weight-base: 400;
+}
+
+/* spacing */
+:root {
+  --spacing-unit: 8px;
+  --spacing-xs: calc(var(--spacing-unit) * 0.5);
+  --spacing-sm: var(--spacing-unit);
+  --spacing-md: calc(var(--spacing-unit) * 2);
+  --spacing-lg: calc(var(--spacing-unit) * 3);
+  --spacing-xl: calc(var(--spacing-unit) * 4);
+}
+
+/* border radius */
+:root {
+  --border-radius: 4px;
+  --border-radius-sm: 2px;
+  --border-radius-lg: 8px;
+}
+
+/* shadows */
+:root {
+  --shadow-small: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-large: 0 8px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* dark */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #5c67a3;
+    --secondary-color: #a1c6ea;
+    --background-color: #1d1f27;
+    --text-color: #e0e0e0;
+    --link-color: #a1c6ea;
+    --link-color-alt: #bcc9e4;
+    --error-color: #d64550;
+    --warning-color: #f0c04a;
+    --success-color: #7fb77e;
+
+    --primary-color-hover: #4b568f;
+    --primary-color-active: #3a4373;
+    --primary-color-focus: #7881c0;
+
+    --secondary-color-hover: #91b8db;
+    --secondary-color-active: #7da5c8;
+    --secondary-color-focus: #bcd9f1;
+
+    --link-color-hover: #3d4c91;
+    --link-color-focus: #5c67a3;
+    --link-color-hover-alt: #f9f9fa;
+    --link-color-focus-alt: #f4f5f9;
+
+    --background-color-hover: #2a2d3d;
+    --background-color-focus: #2c313d;
+
+    --button-text-color: #f9f9fa;
+
+    --btn-danger-bg: #d64550;
+    --btn-danger-bg-hover: #c53843;
+    --btn-danger-bg-active: #a92d39;
+  
+    --btn-success-bg: #7fb77e;
+    --btn-success-bg-hover: #6f9e6a;
+    --btn-success-bg-active: #5d885a;
+  }
+}
+
+
+@media (max-width: 480px) {
+  :root {
+    --font-size-small: 0.75rem;       /* 12px */
+    --font-size-medium: 0.875rem;     /* 14px */
+    --font-size-base: 0.875rem;       /* 14px */
+    --font-size-large: 1rem;          /* 16px */
+    --font-size-xlarge: 1.125rem;     /* 18px */
+    --font-size-xxlarge: 1.25rem;     /* 20px */
+  }
+}
