@@ -28,15 +28,13 @@ export type MovieAddDto = {
 export const MovieStatus = {
   PLANNED: "PLANNED",
   ACTIVE: "ACTIVE",
-  ARCHIVED: "ARCHIVED",
-  DELETED: "DELETED",
+  ARCHIVED: "ARCHIVED"
 } as const;
 export type MovieStatus = typeof MovieStatus[keyof typeof MovieStatus];
 export const movieStatusOptions = [
   { label: "Запланирован", value: MovieStatus.PLANNED },
   { label: "Активен", value: MovieStatus.ACTIVE },
   { label: "Архив", value: MovieStatus.ARCHIVED },
-  { label: "Удалён", value: MovieStatus.DELETED },
 ];
 
 

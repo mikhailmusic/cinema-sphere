@@ -56,7 +56,20 @@ export default function MovieRecord({ movie, onDelete, onDetails }: MovieRecordP
         </div>
       </article>
 
-      {isModalOpen && <MovieModal onClose={() => setIsModalOpen(false)} movie={movie} />}
+      {isModalOpen && (
+        <MovieModal
+          onClose={() => setIsModalOpen(false)}
+          movie={movie}
+          onDelete={() => {
+            onDelete(movie);
+            setIsModalOpen(false);
+          }}
+          onEdit={(m) => {
+            onDetails(m);
+            setIsModalOpen(false);
+          }}
+        />
+      )}
     </>
   );
 }

@@ -8,10 +8,20 @@ import type { MovieDto } from "../../api/types";
 interface MovieModalProps {
   movie: MovieDto;
   onClose: () => void;
-};
+  onEdit: (movie: MovieDto) => void;
+  onDelete: (movieId: number) => void;
+}
 
-export default function MovieModal({ movie, onClose }: MovieModalProps) {
+export default function MovieModal({ movie, onClose, onEdit, onDelete }: MovieModalProps) {
   const posterUrl = getImageUrl(movie.image);
+
+  const handleDelete = () => {
+    onDelete(movie.id);
+  };
+
+  const handleEdit = () => {
+    onEdit(movie);
+  };
 
   return (
     <BaseModal
@@ -19,21 +29,39 @@ export default function MovieModal({ movie, onClose }: MovieModalProps) {
       title={movie.title}
       leftContent={
         <>
-          <button className="icon danger" title="Удалить"><Trash /></button>
-          <button className="icon primary" title="Редактировать"><Pencil /></button>
+          <button className="icon danger" title="Удалить" onClick={handleDelete}>
+            <Trash />
+          </button>
+          <button className="icon primary" title="Редактировать" onClick={handleEdit}>
+            <Pencil />
+          </button>
         </>
       }
     >
       <div className="modal-info">
         <img src={posterUrl} alt={movie.title} className="modal-poster" />
         <div className="modal-details">
-          <p><strong>Продолжительность:</strong> {formatDuration(movie.duration)}</p>
-          <p><strong>Режиссёр:</strong> {movie.director}</p>
-          <p><strong>Год выхода:</strong> {movie.releaseYear}</p>
-          <p><strong>Язык:</strong> {movie.language}</p>
-          <p><strong>Возрастной рейтинг:</strong> {movie.ageRating}+</p>
-          <p><strong>Жанр:</strong> {movie.genre}</p>
-          <p><strong>Статус:</strong> {movie.movieStatus}</p>
+          <p>
+            <strong>Продолжительность:</strong> {formatDuration(movie.duration)}
+          </p>
+          <p>
+            <strong>Режиссёр:</strong> {movie.director}
+          </p>
+          <p>
+            <strong>Год выхода:</strong> {movie.releaseYear}
+          </p>
+          <p>
+            <strong>Язык:</strong> {movie.language}
+          </p>
+          <p>
+            <strong>Возрастной рейтинг:</strong> {movie.ageRating}+
+          </p>
+          <p>
+            <strong>Жанр:</strong> {movie.genre}
+          </p>
+          <p>
+            <strong>Статус:</strong> {movie.movieStatus}
+          </p>
         </div>
       </div>
 

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { getAllMovies } from "../api/movieApi";
+import { deleteMovie, getAllMovies } from "../api/movieApi";
 import MovieRecord from "../components/MovieRecord/MovieRecord";
 import MovieFormModal from "../components/Modal/MovieFormModal";
 import Button from "../components/Button/Button";
@@ -10,11 +10,9 @@ export default function Main() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingMovie, setEditingMovie] = useState<MovieDto | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const refreshMovies = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
       const allMovies = await getAllMovies();
       if (Array.isArray(allMovies)) {
@@ -22,8 +20,9 @@ export default function Main() {
       } else {
         setMovies([]);
       }
-    } catch {
-      setError("Не удалось загрузить фильмы. Попробуйте позже.");
+    } catch (err) {
+      console.error("Ошибка при загрузке фильмов:", err);
+      setMovies([]);
     } finally {
       setLoading(false);
     }
@@ -48,20 +47,31 @@ export default function Main() {
     setIsModalOpen(false);
   }, []);
 
-  const handleDelete = useCallback((movieId: number) => {
-    console.log(`Delete movie ${movieId}`);
+  const handleDelete = useCallback(async (movieId: number) => {
+    if (!window.confirm("Вы уверены, что хотите удалить этот фильм?")) return;
+
+    try {
+      await deleteMovie(movieId);
+      setMovies((prev) => prev.filter((m) => m.id !== movieId));
+    } catch (err) {
+      console.error("Ошибка при удалении фильма:", err);
+      alert("Ошибка при удалении фильма");
+    }
   }, []);
 
-  const handleSaved = useCallback((savedMovie: MovieDto) => {
-    setMovies((prev) => {
-      if (editingMovie) {
-        return prev.map((m) => (m.id === savedMovie.id ? savedMovie : m));
-      } else {
-        return [...prev, savedMovie];
-      }
-    });
-    closeModal();
-  }, [editingMovie, closeModal]);
+  const handleSaved = useCallback(
+    (savedMovie: MovieDto) => {
+      setMovies((prev) => {
+        if (editingMovie) {
+          return prev.map((m) => (m.id === savedMovie.id ? savedMovie : m));
+        } else {
+          return [...prev, savedMovie];
+        }
+      });
+      closeModal();
+    },
+    [editingMovie, closeModal]
+  );
 
   return (
     <main className="main-content">
@@ -70,8 +80,6 @@ export default function Main() {
           <h3>Сейчас в прокате</h3>
           <Button onClick={openAddModal}>Добавить фильм</Button>
         </div>
-
-        {error && <p className="error-message">{error}</p>}
 
         <div className="movie-list">
           {loading ? (
@@ -91,13 +99,7 @@ export default function Main() {
         </div>
       </section>
 
-      {isModalOpen && (
-        <MovieFormModal
-          movie={editingMovie}
-          onClose={closeModal}
-          onSaved={handleSaved}
-        />
-      )}
+      {isModalOpen && <MovieFormModal movie={editingMovie} onClose={closeModal} onSaved={handleSaved} />}
     </main>
   );
 }
