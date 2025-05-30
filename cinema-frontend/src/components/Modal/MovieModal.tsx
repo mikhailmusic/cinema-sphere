@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { formatDuration, formatDateTime } from "../../utils/dateUtils";
 import BaseModal from "./base/BaseModal";
-import { getImageUrl } from "../../api/movieApi";
-import { addSession, updateSession } from "../../api";
+import { addSession, updateSession, getImageUrl } from "../../api";
 import Pencil from "../../assets/icons/Pencil";
 import Trash from "../../assets/icons/Trash";
 import type { MovieDto, SessionDto, SessionAddDto } from "../../api/types";
-import { movieStatusOptions, sessionStatusOptions } from "../../api/types";
+import { movieStatusOptions, sessionStatusOptions, MovieStatus } from "../../api/types";
 import Button from "../Button/Button";
 import SessionFormInline from "./SessionFormInline";
 
@@ -25,6 +24,7 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
     : [];
   const [addingSession, setAddingSession] = useState(false);
   const [editingSessionId, setEditingSessionId] = useState<number | null>(null);
+  const isMovieEditable = movie.movieStatus === MovieStatus.ACTIVE || movie.movieStatus === MovieStatus.PLANNED;
 
   const handleDelete = () => {
     onDelete(movie.id);
@@ -105,11 +105,10 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
 
       {movie.description && <p className="modal-description">{movie.description}</p>}
 
-      {sortedSessions.length > 0 && (
-        <div className="modal-sessions">
-          <div className="session-add">
-            <h3>Сеансы</h3>
-
+      <div className="modal-sessions">
+        <div className="session-add">
+          <h3>Сеансы</h3>
+          {isMovieEditable && (
             <Button
               onClick={() => {
                 setAddingSession(true);
@@ -118,17 +117,20 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
             >
               + Добавить
             </Button>
-          </div>
-
-          {addingSession && (
-            <SessionFormInline movieId={movie.id} onCancel={closeForm} onSaved={(sessionData) => handleSessionSaved(sessionData)} />
           )}
+        </div>
 
+        {addingSession && isMovieEditable && (
+          <SessionFormInline movieId={movie.id} onCancel={closeForm} onSaved={(sessionData) => handleSessionSaved(sessionData)} />
+        )}
+
+        {sortedSessions.length > 0 && (
           <ul className="session-list">
             {sortedSessions.map((session, index) => (
               <li key={session.id} className={`session-item session-status-${session.status.toLowerCase()}`}>
                 <div
                   onClick={() => {
+                    if (!isMovieEditable) return;
                     if (editingSessionId === session.id) {
                       closeForm();
                     } else {
@@ -150,7 +152,7 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
                     Статус сеанса: <strong>{getSessionStatusLabel(session.status)}</strong>
                   </p>
                 </div>
-                {editingSessionId === session.id && (
+                {editingSessionId === session.id && isMovieEditable && (
                   <SessionFormInline
                     movieId={movie.id}
                     session={session}
@@ -161,8 +163,8 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
               </li>
             ))}
           </ul>
-        </div>
-      )}
+        )}
+      </div>
     </BaseModal>
   );
 }

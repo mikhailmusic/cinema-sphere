@@ -3,7 +3,7 @@ import { deleteMovie, getAllMovies } from "../api/movieApi";
 import MovieRecord from "../components/MovieRecord/MovieRecord";
 import MovieFormModal from "../components/Modal/form/MovieFormModal";
 import Button from "../components/Button/Button";
-import type { MovieDto, SessionDto } from "../api/types";
+import { type MovieDto, type SessionDto, SessionStatus } from "../api/types";
 
 export default function Main() {
   const [movies, setMovies] = useState<MovieDto[]>([]);
@@ -94,6 +94,15 @@ export default function Main() {
     ARCHIVED: "Архивные фильмы"
   };
 
+  const moviesWithoutActiveSessions = movies.filter((movie) => {
+    const sessions = movie.sessionList ?? [];
+    if (sessions.length === 0) return true;
+
+    return sessions.every((s) => s.status === SessionStatus.CANCELLED);
+  });
+
+  const moviesWithActiveSessions = movies.filter((movie) => !moviesWithoutActiveSessions.includes(movie));
+
   return (
     <main className="main-content">
       <div className="heading-button">
@@ -105,14 +114,30 @@ export default function Main() {
         {movies.length === 0 ? (
           <p>Фильмы не найдены</p>
         ) : (
-          Object.entries(statusSections).map(([statusKey, title]) => {
-            const sectionMovies = movies.filter((m) => m.movieStatus === statusKey);
-            if (sectionMovies.length === 0) return null;
+          <>
+            {Object.entries(statusSections).map(([statusKey, title]) => {
+              const sectionMovies = moviesWithActiveSessions.filter((m) => m.movieStatus === statusKey);
+              if (sectionMovies.length === 0) return null;
 
-            return (
-              <section key={statusKey} className="record-group">
-                <h3>{title}</h3>
-                {sectionMovies.map((movie) => (
+              return (
+                <section key={statusKey} className="record-group">
+                  <h3>{title}</h3>
+                  {sectionMovies.map((movie) => (
+                    <MovieRecord
+                      key={movie.id}
+                      movie={movie}
+                      onDetails={() => openEditModal(movie)}
+                      onDelete={() => handleDelete(movie.id)}
+                      onSessionUpdated={handleSessionsUpdated}
+                    />
+                  ))}
+                </section>
+              );
+            })}
+            {moviesWithoutActiveSessions.length > 0 && (
+              <section className="record-group no-active-sessions">
+                <h3>Фильмы без активных сеансов</h3>
+                {moviesWithoutActiveSessions.map((movie) => (
                   <MovieRecord
                     key={movie.id}
                     movie={movie}
@@ -122,8 +147,8 @@ export default function Main() {
                   />
                 ))}
               </section>
-            );
-          })
+            )}
+          </>
         )}
       </div>
 

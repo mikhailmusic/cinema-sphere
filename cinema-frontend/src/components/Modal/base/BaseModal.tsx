@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import Close from "../../../assets/icons/Close";
 
 interface BaseModalProps {
@@ -10,6 +10,15 @@ interface BaseModalProps {
 }
 
 export default function BaseModal({ onClose, children, title, leftContent, rightContent }: BaseModalProps) {
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-window" onClick={(e) => e.stopPropagation()}>
