@@ -9,10 +9,8 @@ export default function Main() {
   const [movies, setMovies] = useState<MovieDto[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingMovie, setEditingMovie] = useState<MovieDto | null>(null);
-  const [loading, setLoading] = useState(false);
 
   const refreshMovies = useCallback(async () => {
-    setLoading(true);
     try {
       const allMovies = await getAllMovies();
       if (Array.isArray(allMovies)) {
@@ -23,8 +21,6 @@ export default function Main() {
     } catch (err) {
       console.error("Ошибка при загрузке фильмов:", err);
       setMovies([]);
-    } finally {
-      setLoading(false);
     }
   }, []);
 
@@ -106,9 +102,7 @@ export default function Main() {
       </div>
 
       <div className="movie-list">
-        {loading ? (
-          <p>Загрузка...</p>
-        ) : movies.length === 0 ? (
+        {movies.length === 0 ? (
           <p>Фильмы не найдены</p>
         ) : (
           Object.entries(statusSections).map(([statusKey, title]) => {
