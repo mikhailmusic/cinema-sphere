@@ -9,7 +9,7 @@ export type MovieDto = {
   ageRating: number;
   language: string;
   genre: string;
-  movieStatus: string;
+  movieStatus: MovieStatus;
   sessionList: SessionDto[];
 };
 export type MovieAddDto = {
@@ -22,7 +22,7 @@ export type MovieAddDto = {
   image?: File | null;
   description: string;
   ageRating: number;
-  movieStatus: string;
+  movieStatus: MovieStatus;
 };
 
 export const MovieStatus = {
@@ -53,7 +53,7 @@ export const sessionStatusOptions = [
 export type SessionDto = {
   id: number;
   startTime: string;
-  status: string;
+  status: SessionStatus;
   hallName: string;
   seatCount: number;
 };
@@ -61,7 +61,7 @@ export type SessionAddDto = {
   hallId: number;
   movieId: number;
   startTime: string;
-  status: string;
+  status: SessionStatus;
 }
 
 

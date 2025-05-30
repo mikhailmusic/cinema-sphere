@@ -44,8 +44,9 @@
 }
 
 .session-right {
-  color: #666;
+  color: var(--archived-text);
 }
+
 
 
 @media (max-width: 768px) {
