@@ -3,7 +3,7 @@ import { formatDuration } from "../../utils/dateUtils";
 import { getImageUrl } from "../../api/movieApi";
 import MovieModal from "../Modal/MovieModal";
 import Dots from "../../assets/icons/Dots";
-import type { MovieDto, SessionDto } from "../../api/types";
+import { type MovieDto, type SessionDto, SessionStatus } from "../../api/types";
 
 type MovieRecordProps = {
   movie: MovieDto;
@@ -16,12 +16,14 @@ export default function MovieRecord({ movie, onDelete, onDetails, onSessionUpdat
   const [isModalOpen, setIsModalOpen] = useState(false);
   const posterUrl = getImageUrl(movie.image);
 
+  const classes = ["movie-record", movie.movieStatus.toLowerCase()];
+  if ((movie.sessionList ?? []).length === 0 || (movie.sessionList ?? []).every((s) => s.status === SessionStatus.CANCELLED)) {
+    classes.push("archived");
+  }
+
   return (
     <>
-      <article
-        onClick={() => setIsModalOpen(true)}
-        className={`movie-record${movie.movieStatus === "ARCHIVED" ? " archived" : ""} ${movie.movieStatus === "PLANNED" ? " planned" : ""}`}
-      >
+      <article onClick={() => setIsModalOpen(true)} className={classes.join(" ")}>
         <div className="movie-info">
           <img src={posterUrl} alt={`Постер фильма ${movie.title}`} className="movie-poster" />
           <div className="movie-details">

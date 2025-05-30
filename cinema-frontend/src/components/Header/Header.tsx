@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Burger from "../../assets/icons/BurgerMenu";
 
+
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
@@ -14,9 +15,10 @@ const Header: React.FC = () => {
         <a href="/" className="logo">Кинотеатр «Сфера»</a>
         <nav>
           <ul className={`nav-list ${isMenuOpen ? "active" : ""}`}>
-            <li><a href="#">Расписание</a></li>
-            <li><a href="#">Фильмы</a></li>
-            <li><a href="#">Контакты</a></li>
+            <li><a href="#active" onClick={() => setIsMenuOpen(false)}>В прокате</a></li>
+            <li><a href="#planned" onClick={() => setIsMenuOpen(false)}>Скоро в кино</a></li>
+            <li><a href="#no-active-sessions" onClick={() => setIsMenuOpen(false)}>Без сеансов</a></li>
+            <li><a href="#archived" onClick={() => setIsMenuOpen(false)}>Архив</a></li>
           </ul>
         </nav>
 

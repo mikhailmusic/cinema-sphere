@@ -120,7 +120,7 @@ export default function Main() {
               if (sectionMovies.length === 0) return null;
 
               return (
-                <section key={statusKey} className="record-group">
+                <section key={statusKey} id={statusKey.toLowerCase()}  className="record-group">
                   <h3>{title}</h3>
                   {sectionMovies.map((movie) => (
                     <MovieRecord
@@ -135,7 +135,7 @@ export default function Main() {
               );
             })}
             {moviesWithoutActiveSessions.length > 0 && (
-              <section className="record-group no-active-sessions">
+              <section id="no-active-sessions" className="record-group no-active-sessions">
                 <h3>Фильмы без активных сеансов</h3>
                 {moviesWithoutActiveSessions.map((movie) => (
                   <MovieRecord
