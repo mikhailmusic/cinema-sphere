@@ -6,8 +6,8 @@ import Textarea from "../../Textarea/Textarea";
 import FileUpload from "../../FileUpload/FileUpload";
 import Button from "../../Button/Button";
 
-import type { MovieAddDto, LanguageDto, GenreDto, MovieStatus, MovieDto } from "../../../api/types";
-import { movieStatusOptions } from "../../../api/types";
+import type { MovieAddDto, LanguageDto, GenreDto, MovieDto } from "../../../api/types";
+import { movieStatusOptions, MovieStatus } from "../../../api/types";
 import { updateMovie, addMovie, getAllLanguages, getAllGenres, getImageUrl } from "../../../api";
 
 interface Props {
@@ -27,7 +27,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
   const [ageRating, setAgeRating] = useState(0);
   const [languageId, setLanguageId] = useState(-1);
   const [genreId, setGenreId] = useState(-1);
-  const [movieStatus, setMovieStatus] = useState<MovieStatus | "">("");
+  const [movieStatus, setMovieStatus] = useState<MovieStatus>(MovieStatus.ACTIVE);
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | string | null>(null);
 
@@ -76,7 +76,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
       setAgeRating(0);
       setLanguageId(-1);
       setGenreId(-1);
-      setMovieStatus("");
+      setMovieStatus(MovieStatus.ACTIVE);
       setDescription("");
       setImage(null);
     }
@@ -150,14 +150,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
   return (
     <BaseModal onClose={onClose} title={movie ? "Редактировать фильм" : "Новый фильм"}>
       <form className="modal-form" onSubmit={handleSubmit} noValidate>
-        <Input
-          name="title"
-          label="Название"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          error={errors.title}
-        />
+        <Input name="title" label="Название" value={title} onChange={(e) => setTitle(e.target.value)} required error={errors.title} />
 
         <Input
           name="director"
@@ -227,7 +220,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
           label="Статус"
           options={movieStatusOptions}
           value={movieStatus}
-          onChange={(value) => setMovieStatus(value as MovieStatus)}
+          onChange={(value: string) => setMovieStatus(value as MovieStatus)}
           placeholder="Выберите статус"
           required
           error={errors.movieStatus}
