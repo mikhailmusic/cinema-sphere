@@ -3,6 +3,6 @@
   "semi": true,
   "tabWidth": 2,
   "singleQuote": false,
-  "printWidth": 130,
+  "printWidth": 140,
   "trailingComma": "none"
 }

@@ -1,40 +1,44 @@
 /* colors */
 :root {
-  --primary-color: #5c67a3;
-  --secondary-color: #a1c6ea;
-  --background-color: #f9f9fa;
-  --text-color: #2d2d2d;
-  --text-color-light: #f9f9fa;
-  --text-color-muted: #999;
-  --link-color: #4a5aa4;
-  --link-color-alt: #bcc9e4;
-  --error-color: #d64550;
-  --warning-color: #f0c04a;
-  --success-color: #7fb77e;
+  --primary-color: #4f589e;
+  --secondary-color: #b2c9f8;
+  --background-color: #fbfcfe;
+  --text-color: #252b33;
+  --text-color-light: #fbfcfe;
+  --text-color-muted: #7a7f8c;
+  --link-color: #3e4ba0;
+  --link-color-alt: #c5d1f3;
+  --error-color: #e03e3e;
+  --warning-color: #f2b01e;
+  --success-color: #3db94d;
 
-  --primary-color-hover: #4b568f;
-  --primary-color-active: #3a4373;
-  --primary-color-focus: #7881c0;
+  --primary-color-hover: #434d8a;
+  --primary-color-active: #373f73;
+  --primary-color-focus: #6275b6;
 
-  --secondary-color-hover: #91b8db;
-  --secondary-color-active: #7da5c8;
-  --secondary-color-focus: #bcd9f1;
+  --secondary-color-hover: #a5bff3;
+  --secondary-color-active: #8ca9dc;
+  --secondary-color-focus: #d1d9f9;
 
-  --link-color-hover: #3d4c91;
-  --link-color-focus: #5c67a3;
-  --link-color-hover-alt: #f9f9fa;
-  --link-color-focus-alt: #f4f5f9;
+  --link-color-hover: #32407a;
+  --link-color-focus: #4f589e;
+  --link-color-hover-alt: #fbfcfe;
+  --link-color-focus-alt: #f0f3fb;
 
-  --background-color-hover: #efeff1;
-  --background-color-focus: #e2e2e5;
+  --background-color-hover: #e8ebf4;
+  --background-color-focus: #dce0eb;
 
-  --btn-danger-bg: #d64550;
-  --btn-danger-bg-hover: #c53843;
-  --btn-danger-bg-active: #a92d39;
+  --btn-danger-bg: #e03e3e;
+  --btn-danger-bg-hover: #c73232;
+  --btn-danger-bg-active: #9e2929;
 
-  --btn-success-bg: #7fb77e;
-  --btn-success-bg-hover: #6f9e6a;
-  --btn-success-bg-active: #5d885a;
+  --btn-success-bg: #3db94d;
+  --btn-success-bg-hover: #35a443;
+  --btn-success-bg-active: #2b7d32;
+
+  --archived-bg: #f0f0f0;
+  --archived-text: #7a7f8c;
+  --archived-border: #cccccc;
 }
 
 /* typography */
@@ -117,10 +121,10 @@
 }
 
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
   :root {
-    --font-size-small: 0.75rem;       /* 12px */
-    --font-size-medium: 0.875rem;     /* 14px */
+    --font-size-small: 0.625rem;      /* 10px */
+    --font-size-medium: 0.75rem;      /* 12px */
     --font-size-base: 0.875rem;       /* 14px */
     --font-size-large: 1rem;          /* 16px */
     --font-size-xlarge: 1.125rem;     /* 18px */

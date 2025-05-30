@@ -73,31 +73,45 @@ export default function Main() {
     [editingMovie, closeModal]
   );
 
+  const statusSections: { [key in MovieDto["movieStatus"]]: string } = {
+    ACTIVE: "Сейчас в прокате",
+    PLANNED: "Скоро в кино",
+    ARCHIVED: "Архивные фильмы"
+  };
+
   return (
     <main className="main-content">
-      <section className="section">
-        <div className="heading-button">
-          <h3>Сейчас в прокате</h3>
-          <Button onClick={openAddModal}>Добавить фильм</Button>
-        </div>
+      <div className="heading-button">
+        <h2>Фильмы</h2>
+        <Button onClick={openAddModal}>Добавить фильм</Button>
+      </div>
 
-        <div className="movie-list">
-          {loading ? (
-            <p>Загрузка...</p>
-          ) : movies.length > 0 ? (
-            movies.map((movie) => (
-              <MovieRecord
-                key={movie.id}
-                movie={movie}
-                onDetails={() => openEditModal(movie)}
-                onDelete={() => handleDelete(movie.id)}
-              />
-            ))
-          ) : (
-            <p>Фильмы не найдены</p>
-          )}
-        </div>
-      </section>
+      <div className="movie-list">
+        {loading ? (
+          <p>Загрузка...</p>
+        ) : movies.length === 0 ? (
+          <p>Фильмы не найдены</p>
+        ) : (
+          Object.entries(statusSections).map(([statusKey, title]) => {
+            const sectionMovies = movies.filter((m) => m.movieStatus === statusKey);
+            if (sectionMovies.length === 0) return null;
+
+            return (
+              <section key={statusKey} className="record-group">
+                <h3>{title}</h3>
+                  {sectionMovies.map((movie) => (
+                    <MovieRecord
+                      key={movie.id}
+                      movie={movie}
+                      onDetails={() => openEditModal(movie)}
+                      onDelete={() => handleDelete(movie.id)}
+                    />
+                  ))}
+              </section>
+            );
+          })
+        )}
+      </div>
 
       {isModalOpen && <MovieFormModal movie={editingMovie} onClose={closeModal} onSaved={handleSaved} />}
     </main>

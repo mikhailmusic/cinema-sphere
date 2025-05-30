@@ -17,7 +17,10 @@ export default function MovieRecord({ movie, onDelete, onDetails }: MovieRecordP
 
   return (
     <>
-      <article className="movie-record" onClick={() => setIsModalOpen(true)}>
+      <article
+        onClick={() => setIsModalOpen(true)}
+        className={`movie-record${movie.movieStatus === "ARCHIVED" ? " archived" : ""} ${movie.movieStatus === "PLANNED" ? " planned" : ""}`}
+      >
         <div className="movie-info">
           <img src={posterUrl} alt={`Постер фильма ${movie.title}`} className="movie-poster" />
           <div className="movie-details">
@@ -25,23 +28,25 @@ export default function MovieRecord({ movie, onDelete, onDetails }: MovieRecordP
             <p>
               {movie.releaseYear} <span>•</span> {formatDuration(movie.duration)}
             </p>
-            <p>
-              <strong>Возраст:</strong> {movie.ageRating}+
-            </p>
-            <p>
-              <strong>Язык:</strong> {movie.language}
-            </p>
+            <div>
+              <p>
+                <strong>Возраст:</strong> {movie.ageRating}+
+              </p>
+              <p>
+                <strong>Язык:</strong> {movie.language}
+              </p>
 
-            <p>
-              <strong>Режиссёр:</strong> {movie.director}
-            </p>
+              <p className="director-info">
+                <strong>Режиссёр:</strong> {movie.director}
+              </p>
 
-            <p>
-              <strong>Жанр:</strong> {movie.genre}
-            </p>
-            <p>
-              <strong>Количество сеансов:</strong> {movie.sessionList?.length ?? 0}
-            </p>
+              <p>
+                <strong>Жанр:</strong> {movie.genre}
+              </p>
+              <p>
+                <strong>Количество сеансов:</strong> {movie.sessionList?.length ?? 0}
+              </p>
+            </div>
           </div>
         </div>
 
