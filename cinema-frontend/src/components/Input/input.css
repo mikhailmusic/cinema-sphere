@@ -5,7 +5,7 @@
 }
 
 .input-label {
-  font-size: 0.9rem;
+  font-size: var(--font-size-medium);
   color: var(--text-color);
 }
 
@@ -28,7 +28,7 @@
   border: none;
   outline: none;
   background: none;
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   color: var(--text-color);
   transition:
     border-color 0.2s,

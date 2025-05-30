@@ -10,6 +10,7 @@
 @import "../components/Modal/base/modal.css";
 @import "../components/Modal/form/movie-form-modal.css";
 @import "../components/Modal/movie-modal.css";
+@import "../components/Modal/session-form.css";
 @import "../components/Input/input.css";
 @import "../components/Dropdown/dropdown.css";
 @import "../components/FileUpload/file-upload.css";

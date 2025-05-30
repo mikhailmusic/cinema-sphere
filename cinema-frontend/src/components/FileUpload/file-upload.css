@@ -31,8 +31,8 @@
   border: 2px solid var(--secondary-color);
 }
 
-@media (max-width: 480px) {
-  .image-preview {
+@media (max-width: 576px) {
+  .image-preview-wrapper {
     display: none;
   }
 }

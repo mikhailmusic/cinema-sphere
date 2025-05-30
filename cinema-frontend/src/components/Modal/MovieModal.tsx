@@ -128,24 +128,28 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
             {sortedSessions.map((session, index) => (
               <li key={session.id} className={`session-item session-status-${session.status.toLowerCase()}`}>
                 <div
-                  className="session-row"
                   onClick={() => {
-                    setEditingSessionId(session.id);
-                    setAddingSession(false);
+                    if (editingSessionId === session.id) {
+                      closeForm();
+                    } else {
+                      setEditingSessionId(session.id);
+                      setAddingSession(false);
+                    }
                   }}
-                  style={{ cursor: "pointer" }}
+                  className="session-info"
                 >
-                  <span className="session-left">
-                    {index + 1}. {formatDateTime(session.startTime)}
-                  </span>
-                  <span className="session-right">
-                    {session.hallName}, мест: {session.seatCount}
-                  </span>
+                  <p className="session-row">
+                    <span className="session-left">
+                      {index + 1}. {formatDateTime(session.startTime)}
+                    </span>
+                    <span className="session-right">
+                      {session.hallName}, мест: {session.seatCount}
+                    </span>
+                  </p>
+                  <p>
+                    Статус сеанса: <strong>{getSessionStatusLabel(session.status)}</strong>
+                  </p>
                 </div>
-                <p>
-                  Статус сеанса: <strong>{getSessionStatusLabel(session.status)}</strong>
-                </p>
-
                 {editingSessionId === session.id && (
                   <SessionFormInline
                     movieId={movie.id}

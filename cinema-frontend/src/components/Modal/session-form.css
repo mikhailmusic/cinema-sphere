@@ -1,0 +1,36 @@
+.session-form-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid var(--secondary-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+input[type="datetime-local"] {
+  font-family: inherit;
+}
+
+.add-session-buttons {
+  display: flex;
+  justify-content: end;
+  gap: 0.25rem;
+  margin-top: 1rem;
+}
+
+.session-input-group {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  width: 100%;
+  justify-content: stretch;
+}
+.session-input-group > * {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 576px) {
+  .session-input-group {
+    flex-direction: column;
+  }
+}

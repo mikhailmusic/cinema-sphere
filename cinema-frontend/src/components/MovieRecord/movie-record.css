@@ -2,19 +2,20 @@
   display: flex;
   gap: 1rem;
   padding: 1rem;
-  border-radius: 0.625rem;
+  border-radius: 0.5rem;
   background-color: var(--background-color-hover);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 0.05em solid var(--secondary-color);
   overflow: hidden;
-transition: border-color 0.3s ease;}
+  transition: border-color 0.3s ease;
+}
 
 .movie-record:hover {
   border-color: var(--secondary-color-hover);
   box-shadow: 0 4px 8px rgba(79, 88, 158, 0.3);
 }
 
-.movie-title{
+.movie-title {
   font-size: var(--font-size-large);
 }
 
@@ -48,16 +49,17 @@ transition: border-color 0.3s ease;}
 }
 
 .movie-record.planned {
-  background: linear-gradient(90deg, rgba(242,176,30,0.15), var(--background-color-hover));
+  background: linear-gradient(90deg, rgba(242, 176, 30, 0.15), var(--background-color-hover));
   border-color: var(--warning-color);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .movie-record.planned:hover {
-  background: linear-gradient(90deg, rgba(242,176,30,0.3), var(--background-color-hover));
-  box-shadow: 0 0 10px rgba(242,176,30,0.4);
+  background: linear-gradient(90deg, rgba(242, 176, 30, 0.3), var(--background-color-hover));
+  box-shadow: 0 0 10px rgba(242, 176, 30, 0.4);
 }
-
 
 .movie-actions {
   position: relative;

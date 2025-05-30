@@ -78,6 +78,7 @@ export default function SessionFormInline({ movieId, session = null, onCancel, o
         error={errors.startTime}
       />
 
+<div className="session-input-group">
       <Dropdown
         label="Зал"
         options={halls.map((h) => ({ label: h.name, value: String(h.id) }))}
@@ -97,8 +98,10 @@ export default function SessionFormInline({ movieId, session = null, onCancel, o
         required
         error={errors.status}
       />
+</div>
 
-      <div style={{ marginTop: 10 }}>
+
+      <div className="add-session-buttons">
         <Button onClick={onCancel}>Отмена</Button>
         <Button submit variant="success">
           Сохранить
