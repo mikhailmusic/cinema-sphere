@@ -3,7 +3,7 @@ import { deleteMovie, getAllMovies } from "../api/movieApi";
 import MovieRecord from "../components/MovieRecord/MovieRecord";
 import MovieFormModal from "../components/Modal/form/MovieFormModal";
 import Button from "../components/Button/Button";
-import type { MovieDto } from "../api/types";
+import type { MovieDto, SessionDto } from "../api/types";
 
 export default function Main() {
   const [movies, setMovies] = useState<MovieDto[]>([]);
@@ -72,6 +72,25 @@ export default function Main() {
     },
     [editingMovie, closeModal]
   );
+  const handleSessionsUpdated = useCallback((movieId: number, updatedSession: SessionDto) => {
+    setMovies((prev) =>
+      prev.map((movie) => {
+        if (movie.id !== movieId) return movie;
+
+        const sessions = movie.sessionList ?? [];
+        const index = sessions.findIndex((s) => s.id === updatedSession.id);
+
+        let newSessionList;
+        if (index === -1) {
+          newSessionList = [...sessions, updatedSession];
+        } else {
+          newSessionList = [...sessions];
+          newSessionList[index] = updatedSession;
+        }
+        return { ...movie, sessionList: newSessionList };
+      })
+    );
+  }, []);
 
   const statusSections: { [key in MovieDto["movieStatus"]]: string } = {
     ACTIVE: "Сейчас в прокате",
@@ -99,14 +118,15 @@ export default function Main() {
             return (
               <section key={statusKey} className="record-group">
                 <h3>{title}</h3>
-                  {sectionMovies.map((movie) => (
-                    <MovieRecord
-                      key={movie.id}
-                      movie={movie}
-                      onDetails={() => openEditModal(movie)}
-                      onDelete={() => handleDelete(movie.id)}
-                    />
-                  ))}
+                {sectionMovies.map((movie) => (
+                  <MovieRecord
+                    key={movie.id}
+                    movie={movie}
+                    onDetails={() => openEditModal(movie)}
+                    onDelete={() => handleDelete(movie.id)}
+                    onSessionUpdated={handleSessionsUpdated}
+                  />
+                ))}
               </section>
             );
           })

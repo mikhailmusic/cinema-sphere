@@ -3,15 +3,16 @@ import { formatDuration } from "../../utils/dateUtils";
 import { getImageUrl } from "../../api/movieApi";
 import MovieModal from "../Modal/MovieModal";
 import Dots from "../../assets/icons/Dots";
-import type { MovieDto } from "../../api/types";
+import type { MovieDto, SessionDto } from "../../api/types";
 
 type MovieRecordProps = {
   movie: MovieDto;
   onDelete: (movie: MovieDto) => void;
   onDetails: (movie: MovieDto) => void;
+  onSessionUpdated: (movieId: number, session: SessionDto) => void;
 };
 
-export default function MovieRecord({ movie, onDelete, onDetails }: MovieRecordProps) {
+export default function MovieRecord({ movie, onDelete, onDetails, onSessionUpdated }: MovieRecordProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const posterUrl = getImageUrl(movie.image);
 
@@ -75,6 +76,7 @@ export default function MovieRecord({ movie, onDelete, onDetails }: MovieRecordP
             onDetails(m);
             setIsModalOpen(false);
           }}
+          onSessionUpdated={onSessionUpdated}
         />
       )}
     </>
