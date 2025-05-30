@@ -47,7 +47,12 @@
   color: var(--archived-text);
 }
 
-
+.session-add{
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 1rem;
+}
 
 @media (max-width: 768px) {
   .modal-poster {

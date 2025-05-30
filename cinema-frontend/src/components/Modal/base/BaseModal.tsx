@@ -18,7 +18,7 @@ export default function BaseModal({ onClose, children, title, leftContent, right
 
           {title && (
             <div className="modal-header-title">
-              <h4>{title}</h4>
+              <h3>{title}</h3>
             </div>
           )}
 

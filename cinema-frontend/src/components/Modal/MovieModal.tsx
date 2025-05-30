@@ -107,8 +107,9 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
 
       {sortedSessions.length > 0 && (
         <div className="modal-sessions">
-          <h4>Сеансы</h4>
-          {!addingSession && (
+          <div className="session-add">
+            <h3>Сеансы</h3>
+
             <Button
               onClick={() => {
                 setAddingSession(true);
@@ -117,7 +118,7 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
             >
               + Добавить
             </Button>
-          )}
+          </div>
 
           {addingSession && (
             <SessionFormInline movieId={movie.id} onCancel={closeForm} onSaved={(sessionData) => handleSessionSaved(sessionData)} />
