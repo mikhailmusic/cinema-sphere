@@ -1,6 +1,8 @@
 package rut.miit.cinema.entity;
 
 import jakarta.persistence.*;
+import rut.miit.cinema.exception.ValidationException;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,10 +14,10 @@ public class Session extends BaseEntity {
     private Hall hall;
 
     public Session(Movie movie, LocalDateTime startTime, Hall hall) {
-        this.movie = movie;
-        this.startTime = startTime;
+        setMovie(movie);
+        setStartTime(startTime);
+        setHall(hall);
         this.status = SessionStatus.ACTIVE;
-        this.hall = hall;
     }
     protected Session() {
     }
@@ -44,18 +46,33 @@ public class Session extends BaseEntity {
     }
 
     protected void setMovie(Movie movie) {
+        if (movie == null) {
+            throw new ValidationException("Movie cannot be null.");
+        }
         this.movie = movie;
     }
 
     public void setStartTime(LocalDateTime startTime) {
+        if (startTime == null) {
+            throw new ValidationException("Start time cannot be null.");
+        }
+        if (startTime.isBefore(LocalDateTime.now())) {
+            throw new ValidationException("Start time cannot be in the past.");
+        }
         this.startTime = startTime;
     }
 
     public void setStatus(SessionStatus status) {
+        if (status == null) {
+            throw new ValidationException("Session status cannot be null.");
+        }
         this.status = status;
     }
 
     public void setHall(Hall hall) {
+        if (hall == null) {
+            throw new ValidationException("Hall cannot be null.");
+        }
         this.hall = hall;
     }
 }

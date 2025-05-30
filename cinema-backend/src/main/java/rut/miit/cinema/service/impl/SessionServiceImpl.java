@@ -6,6 +6,7 @@ import rut.miit.cinema.dto.SessionAddDto;
 import rut.miit.cinema.dto.SessionDto;
 import rut.miit.cinema.entity.*;
 import rut.miit.cinema.exception.NotFoundException;
+import rut.miit.cinema.exception.ValidationException;
 import rut.miit.cinema.repository.HallRepository;
 import rut.miit.cinema.repository.MovieRepository;
 import rut.miit.cinema.repository.SessionRepository;
@@ -46,6 +47,7 @@ public class SessionServiceImpl implements SessionService {
     public SessionDto addSessionInfo(SessionAddDto dto) {
         Movie movie = movieRepository.findById(dto.getMovieId()).orElseThrow(() -> new NotFoundException(Movie.class, dto.getMovieId()));
         Hall hall = hallRepository.findById(dto.getHallId()).orElseThrow(() -> new NotFoundException(Hall.class, dto.getHallId()));
+        validateMovieStatus(movie);
 
         Session session = new Session(movie, dto.getStartTime(), hall);
         sessionRepository.save(session);
@@ -56,6 +58,8 @@ public class SessionServiceImpl implements SessionService {
     public SessionDto updateSessionInfo(Integer id, SessionAddDto dto) {
         Session session = sessionRepository.findById(id).orElseThrow(() -> new NotFoundException(Session.class, id));
         Hall hall = hallRepository.findById(dto.getHallId()).orElseThrow(() -> new NotFoundException(Hall.class, dto.getHallId()));
+        validateMovieStatus(session.getMovie());
+
         session.setHall(hall);
         session.setStartTime(dto.getStartTime());
         session.setStatus(SessionStatus.valueOf(dto.getStatus()));
@@ -66,6 +70,7 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void logicRemoveSessionInfo(Integer id) {
         Session session = sessionRepository.findById(id).orElseThrow(() -> new NotFoundException(Session.class, id));
+        validateMovieStatus(session.getMovie());
         session.setStatus(SessionStatus.DELETED);
         sessionRepository.save(session);
     }
@@ -74,6 +79,12 @@ public class SessionServiceImpl implements SessionService {
     public SessionDto findById(Integer id) {
         Session session = sessionRepository.findById(id).orElseThrow(() -> new NotFoundException(Session.class, id));
         return convertToDto(session);
+    }
+
+    private void validateMovieStatus(Movie movie) {
+        if (movie.getMovieStatus() == MovieStatus.ARCHIVED || movie.getMovieStatus() == MovieStatus.DELETED) {
+            throw new ValidationException("Operation not allowed: movie is archived or deleted.");
+        }
     }
 
     private SessionDto convertToDto(Session session) {

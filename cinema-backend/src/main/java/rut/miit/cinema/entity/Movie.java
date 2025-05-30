@@ -1,6 +1,7 @@
 package rut.miit.cinema.entity;
 
 import jakarta.persistence.*;
+import rut.miit.cinema.exception.ValidationException;
 
 import java.util.List;
 
@@ -21,16 +22,16 @@ public class Movie extends BaseEntity {
     private List<Session> sessionList;
 
     public Movie(String title, int duration, int releaseYear, String director, String imageKey, String description, int ageRating, Language language, Genre genre, MovieStatus movieStatus) {
-        this.title = title;
-        this.duration = duration;
-        this.releaseYear = releaseYear;
-        this.director = director;
-        this.imageKey = imageKey;
-        this.description = description;
-        this.ageRating = ageRating;
-        this.language = language;
-        this.genre = genre;
-        this.movieStatus = movieStatus;
+        setTitle(title);
+        setDuration(duration);
+        setReleaseYear(releaseYear);
+        setDirector(director);
+        setImageKey(imageKey);
+        setDescription(description);
+        setAgeRating(ageRating);
+        setLanguage(language);
+        setGenre(genre);
+        setMovieStatus(movieStatus);
     }
 
     protected Movie() {
@@ -97,30 +98,51 @@ public class Movie extends BaseEntity {
     }
 
     public void setTitle(String title) {
+        if (title == null || title.isBlank()) {
+            throw new ValidationException("Movie title cannot be null or blank.");
+        }
         this.title = title;
     }
 
     public void setDuration(int duration) {
+        if (duration <= 0) {
+            throw new ValidationException("Duration must be greater than 0.");
+        }
         this.duration = duration;
     }
 
     public void setReleaseYear(int releaseYear) {
+        if (releaseYear < 1888) {
+            throw new ValidationException("Release year must not be earlier than 1888.");
+        }
         this.releaseYear = releaseYear;
     }
 
     public void setDirector(String director) {
+        if (director != null && director.length() > 100) {
+            throw new ValidationException("Director name cannot exceed 100 characters.");
+        }
         this.director = director;
     }
 
     public void setImageKey(String imageKey) {
+        if (imageKey == null || imageKey.isBlank()) {
+            throw new ValidationException("Image key cannot be null or blank.");
+        }
         this.imageKey = imageKey;
     }
 
     public void setLanguage(Language language) {
+        if (language == null) {
+            throw new ValidationException("Language cannot be null.");
+        }
         this.language = language;
     }
 
     public void setGenre(Genre genre) {
+        if (genre == null) {
+            throw new ValidationException("Genre cannot be null.");
+        }
         this.genre = genre;
     }
 
@@ -129,10 +151,16 @@ public class Movie extends BaseEntity {
     }
 
     public void setAgeRating(int ageRating) {
+        if (ageRating < 0 || ageRating > 100) {
+            throw new ValidationException("Age rating must be between 0 and 100.");
+        }
         this.ageRating = ageRating;
     }
 
     public void setMovieStatus(MovieStatus movieStatus) {
+        if (movieStatus == null) {
+            throw new ValidationException("Movie status cannot be null.");
+        }
         this.movieStatus = movieStatus;
     }
 
