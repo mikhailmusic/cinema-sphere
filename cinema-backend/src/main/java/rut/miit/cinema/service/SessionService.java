@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface SessionService {
     List<SessionDto> findAllSessions();
-    void addSessionInfo(SessionAddDto dto);
-    void updateSessionInfo(Integer id, SessionAddDto dto);
+    SessionDto addSessionInfo(SessionAddDto dto);
+    SessionDto updateSessionInfo(Integer id, SessionAddDto dto);
     void logicRemoveSessionInfo(Integer id);
     SessionDto findById(Integer id);
 }

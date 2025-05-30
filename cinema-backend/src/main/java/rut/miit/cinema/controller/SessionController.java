@@ -24,13 +24,13 @@ public class SessionController {
     }
 
     @PostMapping
-    public void addSession(@RequestBody SessionAddDto dto) {
-        sessionService.addSessionInfo(dto);
+    public SessionDto addSession(@RequestBody SessionAddDto dto) {
+        return sessionService.addSessionInfo(dto);
     }
 
     @PutMapping("/{id}")
-    public void updateSession(@PathVariable Integer id, @RequestBody SessionAddDto dto) {
-        sessionService.updateSessionInfo(id, dto);
+    public SessionDto updateSession(@PathVariable Integer id, @RequestBody SessionAddDto dto) {
+        return sessionService.updateSessionInfo(id, dto);
     }
 
     @GetMapping("/{id}")

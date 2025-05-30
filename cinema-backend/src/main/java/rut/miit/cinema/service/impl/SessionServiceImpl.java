@@ -43,22 +43,24 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public void addSessionInfo(SessionAddDto dto) {
+    public SessionDto addSessionInfo(SessionAddDto dto) {
         Movie movie = movieRepository.findById(dto.getMovieId()).orElseThrow(() -> new NotFoundException(Movie.class, dto.getMovieId()));
         Hall hall = hallRepository.findById(dto.getHallId()).orElseThrow(() -> new NotFoundException(Hall.class, dto.getHallId()));
 
         Session session = new Session(movie, dto.getStartTime(), hall);
         sessionRepository.save(session);
+        return convertToDto(session);
     }
 
     @Override
-    public void updateSessionInfo(Integer id, SessionAddDto dto) {
+    public SessionDto updateSessionInfo(Integer id, SessionAddDto dto) {
         Session session = sessionRepository.findById(id).orElseThrow(() -> new NotFoundException(Session.class, id));
         Hall hall = hallRepository.findById(dto.getHallId()).orElseThrow(() -> new NotFoundException(Hall.class, dto.getHallId()));
         session.setHall(hall);
         session.setStartTime(dto.getStartTime());
         session.setStatus(SessionStatus.valueOf(dto.getStatus()));
         sessionRepository.save(session);
+        return convertToDto(session);
     }
 
     @Override
