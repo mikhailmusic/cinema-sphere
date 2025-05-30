@@ -26,14 +26,16 @@ export default function MovieRecord({ movie, onDelete, onDetails }: MovieRecordP
               {movie.releaseYear} <span>•</span> {formatDuration(movie.duration)}
             </p>
             <p>
+              <strong>Возраст:</strong> {movie.ageRating}+
+            </p>
+            <p>
               <strong>Язык:</strong> {movie.language}
             </p>
+
             <p>
               <strong>Режиссёр:</strong> {movie.director}
             </p>
-            <p>
-              <strong>Возраст:</strong> {movie.ageRating}+
-            </p>
+
             <p>
               <strong>Жанр:</strong> {movie.genre}
             </p>

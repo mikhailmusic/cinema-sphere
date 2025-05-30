@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { deleteMovie, getAllMovies } from "../api/movieApi";
 import MovieRecord from "../components/MovieRecord/MovieRecord";
-import MovieFormModal from "../components/Modal/MovieFormModal";
+import MovieFormModal from "../components/Modal/form/MovieFormModal";
 import Button from "../components/Button/Button";
 import type { MovieDto } from "../api/types";
 

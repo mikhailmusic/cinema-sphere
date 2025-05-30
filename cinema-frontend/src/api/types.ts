@@ -38,6 +38,16 @@ export const movieStatusOptions = [
 ];
 
 
+export const SessionStatus = {
+  ACTIVE: "ACTIVE",
+  CANCELLED: "CANCELLED",
+} as const;
+export type SessionStatus = typeof SessionStatus[keyof typeof SessionStatus];
+export const sessionStatusOptions = [
+  { label: "Активен", value: SessionStatus.ACTIVE },
+  { label: "Отменён", value: SessionStatus.CANCELLED },
+];
+
 
 
 export type SessionDto = {

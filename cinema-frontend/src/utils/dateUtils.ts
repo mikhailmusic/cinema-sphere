@@ -4,40 +4,33 @@ export const formatDate = (dateStr: string): string => {
   return date.toLocaleDateString("ru-RU", {
     year: "numeric",
     month: "long",
-    day: "numeric",
+    day: "numeric"
   });
 };
 
 export const formatDuration = (minutes: number): string => {
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
-  return [
-    h > 0 ? `${h} ч` : null,
-    m > 0 ? `${m} мин` : null,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  return [h > 0 ? `${h} ч` : null, m > 0 ? `${m} мин` : null].filter(Boolean).join(" ");
 };
 
-export const formatDateRange = (startDateStr: string, endDateStr: string): string => {
-  const startDate = new Date(startDateStr);
-  const endDate = new Date(endDateStr);
+export const formatDateTime = (isoString: string): string => {
+  const date = new Date(isoString);
+  if (isNaN(date.getTime())) return "";
 
-  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return "";
+  const now = new Date();
+  const year = date.getFullYear();
+  const sameYear = year === now.getFullYear();
 
-  const sameYear = startDate.getFullYear() === endDate.getFullYear();
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "long",
+    ...(sameYear ? {} : { year: "numeric" })
+  };
+  const datePart = new Intl.DateTimeFormat("ru-RU", dateOptions).format(date);
 
-  const startFormatted = startDate.toLocaleDateString("ru-RU", {
-    day: "2-digit",
-    month: "2-digit",
-    ...(sameYear ? {} : { year: "numeric" }),
-  });
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
 
-  const endFormatted = endDate.toLocaleDateString("ru-RU", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-
-  return `${startFormatted} – ${endFormatted}`;
+  return `${datePart} ${hours}:${minutes}`;
 };

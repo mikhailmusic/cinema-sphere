@@ -7,10 +7,11 @@
 @import "../components/Footer/footer.css";
 @import "../components/Button/button.css";
 @import "../components/MovieRecord/movie-record.css";
-@import "../components/Modal/modal.css";
+@import "../components/Modal/base/modal.css";
+@import "../components/Modal/form/movie-form-modal.css";
+@import "../components/Modal/movie-modal.css";
 @import "../components/Input/input.css";
 @import "../components/Dropdown/dropdown.css";
-@import "../components/Modal/movie-form-modal.css";
 @import "../components/FileUpload/file-upload.css";
 @import "../components/Calendar/calendar.css";
 @import "../components/DateInput/date-input.css";

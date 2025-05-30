@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import BaseModal from "./BaseModal";
-import Input from "../Input/Input";
-import Dropdown from "../Dropdown/Dropdown";
-import Textarea from "../Textarea/Textarea";
-import FileUpload from "../FileUpload/FileUpload";
-import Button from "../Button/Button";
+import BaseModal from "../base/BaseModal";
+import Input from "../../Input/Input";
+import Dropdown from "../../Dropdown/Dropdown";
+import Textarea from "../../Textarea/Textarea";
+import FileUpload from "../../FileUpload/FileUpload";
+import Button from "../../Button/Button";
 
-import type { MovieAddDto, LanguageDto, GenreDto, MovieStatus, MovieDto } from "../../api/types";
-import { movieStatusOptions } from "../../api/types";
-import { updateMovie, addMovie, getAllLanguages, getAllGenres, getImageUrl } from "../../api";
+import type { MovieAddDto, LanguageDto, GenreDto, MovieStatus, MovieDto } from "../../../api/types";
+import { movieStatusOptions } from "../../../api/types";
+import { updateMovie, addMovie, getAllLanguages, getAllGenres, getImageUrl } from "../../../api";
 
 interface Props {
   movie?: MovieDto | null;

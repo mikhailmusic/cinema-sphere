@@ -1,5 +1,5 @@
 import React from "react";
-import Close from "../../assets/icons/Close";
+import Close from "../../../assets/icons/Close";
 
 interface BaseModalProps {
   onClose: () => void;
