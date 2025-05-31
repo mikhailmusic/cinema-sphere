@@ -31,6 +31,9 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | string | null>(null);
 
+  const isArchived = movieStatus === "ARCHIVED";
+
+
   const [errors, setErrors] = useState<{
     title?: string;
     director?: string;
@@ -100,6 +103,8 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
     if (languageId === -1) newErrors.languageId = "Пожалуйста, выберите язык";
     if (genreId === -1) newErrors.genreId = "Пожалуйста, выберите жанр";
     if (!title.trim()) newErrors.title = "Введите название фильма";
+    if (!director.trim()) newErrors.director = "Введите информацию о режиссере";
+
     if (duration <= 0) newErrors.duration = "Введите корректную длительность";
     if (ageRating < 0) newErrors.ageRating = "Возрастной рейтинг не может быть отрицательным";
     if (!movieStatus) newErrors.movieStatus = "Пожалуйста, выберите статус фильма";
@@ -150,7 +155,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
   return (
     <BaseModal onClose={onClose} title={movie ? "Редактировать фильм" : "Новый фильм"}>
       <form className="modal-form" onSubmit={handleSubmit} noValidate>
-        <Input name="title" label="Название" value={title} onChange={(e) => setTitle(e.target.value)} required error={errors.title} />
+        <Input name="title" label="Название" value={title} readOnly={isArchived} onChange={(e) => setTitle(e.target.value)} required error={errors.title} />
 
         <Input
           name="director"
@@ -158,7 +163,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
           value={director}
           onChange={(e) => setDirector(e.target.value)}
           required
-          error={errors.director}
+          error={errors.director} readOnly={isArchived}
         />
 
         <div className="modal-input-group">
@@ -169,7 +174,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
             value={duration}
             onChange={(e) => setDuration(Number(e.target.value))}
             min={1}
-            required
+            required readOnly={isArchived}
             error={errors.duration}
           />
           <Input
@@ -180,7 +185,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
             onChange={(e) => setReleaseYear(Number(e.target.value))}
             min={1800}
             max={new Date().getFullYear() + 5}
-            required
+            required readOnly={isArchived}
             error={errors.releaseYear}
           />
         </div>
@@ -192,7 +197,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
           value={ageRating}
           onChange={(e) => setAgeRating(Number(e.target.value))}
           min={0}
-          required
+          required readOnly={isArchived}
           error={errors.ageRating}
         />
 
@@ -203,7 +208,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
           value={languageId === -1 ? "" : String(languageId)}
           onChange={(value) => setLanguageId(Number(value))}
           placeholder="Выберите язык"
-          required
+          required readOnly={isArchived}
           error={errors.languageId}
         />
 
@@ -214,7 +219,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
           value={genreId === -1 ? "" : String(genreId)}
           onChange={(value) => setGenreId(Number(value))}
           placeholder="Выберите жанр"
-          required
+          required readOnly={isArchived}
           error={errors.genreId}
         />
 
@@ -234,11 +239,11 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
           label="Описание"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          required
+          required readOnly={isArchived}
           error={errors.description}
         />
 
-        <FileUpload label="Постер" file={image} onChange={setImage} error={errors.image} />
+        <FileUpload label="Постер" file={image} onChange={setImage} error={errors.image} disabled={isArchived} />
 
         <div className="add-movie-buttons">
           <Button onClick={onClose}>Отменить</Button>

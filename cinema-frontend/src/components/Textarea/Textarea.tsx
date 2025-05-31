@@ -8,6 +8,7 @@ interface TextareaProps {
   rows?: number;
   required?: boolean;
   error?: string;
+  readOnly?: boolean;
 }
 
 const Textarea: React.FC<TextareaProps> = ({
@@ -17,10 +18,11 @@ const Textarea: React.FC<TextareaProps> = ({
   onChange,
   rows = 4,
   required = false,
-  error = ""
+  error = "",
+  readOnly = false
 }) => {
   return (
-    <div className="input-wrapper">
+<div  className={`input-wrapper ${readOnly ? "readonly" : ""}`}>
       {label && <label className="input-label" htmlFor={name}>{label}</label>}
       <textarea
         id={name}
@@ -30,6 +32,7 @@ const Textarea: React.FC<TextareaProps> = ({
         onChange={onChange}
         rows={rows}
         required={required}
+        readOnly={readOnly}
       />
       {error && <span className="input-error-message">{error}</span>}
     </div>

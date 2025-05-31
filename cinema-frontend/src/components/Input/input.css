@@ -79,6 +79,12 @@
   cursor: pointer;
 }
 
-
+.input-wrapper.readonly{
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.input-wrapper.readonly .input-field {
+  cursor: not-allowed;
+}
 
 

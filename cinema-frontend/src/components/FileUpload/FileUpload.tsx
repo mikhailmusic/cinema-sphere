@@ -9,9 +9,10 @@ type FileUploadProps = {
   accept?: string;
   required?: boolean;
   error?: string;
+  disabled?: boolean;
 };
 
-export default function FileUpload({ label, file, onChange, accept = "image/*", required = false, error }: FileUploadProps) {
+export default function FileUpload({ label, file, onChange, accept = "image/*", required = false, error, disabled = false }: FileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string>("");
@@ -35,15 +36,19 @@ export default function FileUpload({ label, file, onChange, accept = "image/*", 
   }, [file]);
 
   const handleClick = () => {
-    fileInputRef.current?.click();
+    if (!disabled) {
+      fileInputRef.current?.click();
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (disabled) return;
     const selectedFile = e.target.files?.[0] ?? null;
     onChange(selectedFile);
   };
 
   const handleClear = () => {
+    if (disabled) return;
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -53,7 +58,7 @@ export default function FileUpload({ label, file, onChange, accept = "image/*", 
   };
 
   return (
-    <div className={`input-wrapper ${error ? "has-error" : ""}`}>
+    <div className={`input-wrapper ${error ? "has-error" : ""} ${disabled ? "readonly" : ""}`}>
       {label && <label className="input-label">{label}</label>}
 
       <div className="file-upload-wrapper">
@@ -65,8 +70,11 @@ export default function FileUpload({ label, file, onChange, accept = "image/*", 
           required={required && !preview}
           className="file-input"
           style={{ display: "none" }}
+          disabled={disabled}
         />
-        <Button onClick={handleClick}>Выберите файл</Button>
+        <Button onClick={handleClick} disabled={disabled}>
+          Выберите файл
+        </Button>
 
         {fileName && <span className="file-name">{fileName}</span>}
       </div>
@@ -74,9 +82,16 @@ export default function FileUpload({ label, file, onChange, accept = "image/*", 
       {preview && (
         <div className="image-preview-wrapper">
           <img src={preview} alt="Превью" className="image-preview" />
-          <button type="button" className="clear-file-button" onClick={handleClear} aria-label="Очистить изображение">
-            <Close />
-          </button>
+          {!disabled && (
+            <button
+              type="button"
+              className="clear-file-button"
+              onClick={handleClear}
+              aria-label="Очистить изображение"
+            >
+              <Close />
+            </button>
+          )}
         </div>
       )}
 
@@ -84,3 +99,4 @@ export default function FileUpload({ label, file, onChange, accept = "image/*", 
     </div>
   );
 }
+

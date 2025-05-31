@@ -52,7 +52,7 @@ export default function Input({
   };
 
   return (
-    <div className="input-wrapper">
+    <div  className={`input-wrapper ${readOnly ? "readonly" : ""}`}>
       {label && (
         <label htmlFor={name} className="input-label">
           {label}

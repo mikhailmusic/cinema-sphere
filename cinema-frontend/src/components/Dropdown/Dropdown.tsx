@@ -16,6 +16,7 @@ interface DropdownProps {
   placeholder?: string;
   required?: boolean;
   error?: string;
+  readOnly?: boolean;
 }
 
 export default function Dropdown({
@@ -26,16 +27,23 @@ export default function Dropdown({
   onChange,
   placeholder = "Выберите...",
   required = false,
-  error = ""
+  error = "",
+  readOnly = false
 }: DropdownProps) {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const toggleOpen = () => setOpen((prev) => !prev);
+  const toggleOpen = () => {
+    if (!readOnly) {
+      setOpen((prev) => !prev);
+    }
+  };
 
   const handleSelect = (optionValue: string) => {
-    onChange(optionValue);
-    setOpen(false);
+    if (!readOnly) {
+      onChange(optionValue);
+      setOpen(false);
+    }
   };
 
   const selectedOption = options.find((opt) => opt.value === value);
@@ -59,15 +67,15 @@ export default function Dropdown({
   }, [open]);
 
   return (
-    <div className="dropdown-wrapper" ref={wrapperRef}>
+    <div className={`dropdown-wrapper ${readOnly ? "readonly" : ""}`} ref={wrapperRef}>
       <Input
         name={name}
         label={label}
         value={selectedOption?.label || ""}
         onChange={() => {}}
         placeholder={placeholder}
-        readOnly
-        required={required}
+        readOnly={readOnly}
+        required={required} 
         error={error}
         icon={<ChevronDown className={`dropdown-arrow ${open ? "rotated" : ""}`} />}
         onClick={toggleOpen}
