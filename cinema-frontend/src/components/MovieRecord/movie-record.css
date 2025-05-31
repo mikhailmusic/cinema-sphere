@@ -111,6 +111,13 @@
   background-color: #ffeaea;
 }
 
+.movie-record,
+.movie-info,
+.movie-poster {
+  transition: all 0.3s ease;
+}
+
+
 @media (max-width: 576px) {
   .movie-record {
     padding: 0.5rem;

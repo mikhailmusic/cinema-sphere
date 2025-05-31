@@ -3,10 +3,12 @@
   object-fit: contain;
   border-radius: 4px;
   max-width: 200px;
+  transition: all 0.3s ease;
 }
 .modal-info {
   display: flex;
   gap: 2rem;
+    transition: all 0.3s ease;
 }
 
 .session-list {

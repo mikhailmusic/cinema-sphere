@@ -32,5 +32,6 @@ input[type="datetime-local"] {
 @media (max-width: 576px) {
   .session-input-group {
     flex-direction: column;
+    gap: 0.5rem;
   }
 }
