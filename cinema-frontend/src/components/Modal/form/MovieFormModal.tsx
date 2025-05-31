@@ -197,6 +197,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
         />
 
         <Dropdown
+          name="movie-language"
           label="Язык"
           options={languages.map((l) => ({ label: l.name, value: String(l.id) }))}
           value={languageId === -1 ? "" : String(languageId)}
@@ -207,6 +208,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
         />
 
         <Dropdown
+          name="movie-genre"
           label="Жанр"
           options={genres.map((g) => ({ label: g.name, value: String(g.id) }))}
           value={genreId === -1 ? "" : String(genreId)}
@@ -217,6 +219,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
         />
 
         <Dropdown
+          name="movie-status"
           label="Статус"
           options={movieStatusOptions}
           value={movieStatus}

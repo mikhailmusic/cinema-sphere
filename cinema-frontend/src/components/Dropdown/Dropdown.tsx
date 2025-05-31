@@ -8,6 +8,7 @@ interface DropdownOption {
 }
 
 interface DropdownProps {
+  name: string;
   label?: string;
   options: DropdownOption[];
   value: string;
@@ -18,6 +19,7 @@ interface DropdownProps {
 }
 
 export default function Dropdown({
+  name,
   label,
   options = [],
   value,
@@ -59,7 +61,7 @@ export default function Dropdown({
   return (
     <div className="dropdown-wrapper" ref={wrapperRef}>
       <Input
-        name="dropdown"
+        name={name}
         label={label}
         value={selectedOption?.label || ""}
         onChange={() => {}}
@@ -73,11 +75,7 @@ export default function Dropdown({
       {open && (
         <ul className="dropdown-list">
           {options.map((option) => (
-            <li
-              key={option.value}
-              onClick={() => handleSelect(option.value)}
-              className={option.value === value ? "active" : ""}
-            >
+            <li key={option.value} onClick={() => handleSelect(option.value)} className={option.value === value ? "active" : ""}>
               {option.label}
             </li>
           ))}

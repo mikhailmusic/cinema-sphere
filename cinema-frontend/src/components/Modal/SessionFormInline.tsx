@@ -78,28 +78,29 @@ export default function SessionFormInline({ movieId, session = null, onCancel, o
         error={errors.startTime}
       />
 
-<div className="session-input-group">
-      <Dropdown
-        label="Зал"
-        options={halls.map((h) => ({ label: h.name, value: String(h.id) }))}
-        value={hallId === -1 ? "" : String(hallId)}
-        onChange={(val) => setHallId(Number(val))}
-        placeholder="Выберите зал"
-        required
-        error={errors.hallId}
-      />
+      <div className="session-input-group">
+        <Dropdown
+          name="session-hall"
+          label="Зал"
+          options={halls.map((h) => ({ label: h.name, value: String(h.id) }))}
+          value={hallId === -1 ? "" : String(hallId)}
+          onChange={(val) => setHallId(Number(val))}
+          placeholder="Выберите зал"
+          required
+          error={errors.hallId}
+        />
 
-      <Dropdown
-        label="Статус"
-        options={sessionStatusOptions}
-        value={status}
-        onChange={(val: string) => setStatus(val as SessionStatus)}
-        placeholder="Выберите статус"
-        required
-        error={errors.status}
-      />
-</div>
-
+        <Dropdown
+          name="session-status"
+          label="Статус"
+          options={sessionStatusOptions}
+          value={status}
+          onChange={(val: string) => setStatus(val as SessionStatus)}
+          placeholder="Выберите статус"
+          required
+          error={errors.status}
+        />
+      </div>
 
       <div className="add-session-buttons">
         <Button onClick={onCancel}>Отмена</Button>
