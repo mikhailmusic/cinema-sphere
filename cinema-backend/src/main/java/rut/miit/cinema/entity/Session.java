@@ -13,11 +13,11 @@ public class Session extends BaseEntity {
     private SessionStatus status;
     private Hall hall;
 
-    public Session(Movie movie, LocalDateTime startTime, Hall hall) {
+    public Session(Movie movie, LocalDateTime startTime, Hall hall, SessionStatus status) {
         setMovie(movie);
         setStartTime(startTime);
         setHall(hall);
-        this.status = SessionStatus.ACTIVE;
+        this.status = status;
     }
     protected Session() {
     }

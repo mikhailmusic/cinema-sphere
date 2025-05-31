@@ -154,7 +154,7 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
                       setAddingSession(false);
                     }
                   }}
-                  className="session-info"
+                  className={`session-info ${!isMovieEditable ? 'session-info-disabled' : ''}`}
                 >
                   <div className="session-row">
                     <span className="session-left">
@@ -168,7 +168,17 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
                     <p>
                       Статус сеанса: <strong>{getSessionStatusLabel(session.status)}</strong>
                     </p>
-                    {isMovieEditable && <Button onClick={() => handleDeleteSession(session.id)} variant="danger">Удалить</Button>}
+                    {isMovieEditable && (
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteSession(session.id);
+                        }}
+                        variant="danger"
+                      >
+                        Удалить
+                      </Button>
+                    )}
                   </div>
                 </article>
 

@@ -49,7 +49,7 @@ public class SessionServiceImpl implements SessionService {
         Hall hall = hallRepository.findById(dto.getHallId()).orElseThrow(() -> new NotFoundException(Hall.class, dto.getHallId()));
         validateMovieStatus(movie);
 
-        Session session = new Session(movie, dto.getStartTime(), hall);
+        Session session = new Session(movie, dto.getStartTime(), hall, SessionStatus.valueOf(dto.getStatus()));
         sessionRepository.save(session);
         return convertToDto(session);
     }

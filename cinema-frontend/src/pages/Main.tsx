@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { deleteMovie, getAllMovies } from "../api/movieApi";
 import MovieRecord from "../components/MovieRecord/MovieRecord";
 import MovieFormModal from "../components/Modal/form/MovieFormModal";
+import MovieModal from "../components/Modal/MovieModal";
 import Button from "../components/Button/Button";
 import { type MovieDto, type SessionDto, SessionStatus } from "../api/types";
 
@@ -9,6 +10,7 @@ export default function Main() {
   const [movies, setMovies] = useState<MovieDto[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingMovie, setEditingMovie] = useState<MovieDto | null>(null);
+  const [selectedMovie, setSelectedMovie] = useState<MovieDto | null>(null);
 
   const refreshMovies = useCallback(async () => {
     try {
@@ -42,6 +44,10 @@ export default function Main() {
     setEditingMovie(null);
     setIsModalOpen(false);
   }, []);
+
+  const handleModalClose = () => {
+    setSelectedMovie(null);
+  };
 
   const handleDelete = useCallback(async (movieId: number) => {
     if (!window.confirm("Вы уверены, что хотите удалить этот фильм?")) return;
@@ -83,20 +89,27 @@ export default function Main() {
           newSessionList = [...sessions];
           newSessionList[index] = updatedSession;
         }
-        return { ...movie, sessionList: newSessionList };
+        const updatedMovie = { ...movie, sessionList: newSessionList };
+        setSelectedMovie((prevSelected) => (prevSelected && prevSelected.id === movieId ? updatedMovie : prevSelected));
+
+        return updatedMovie;
       })
     );
   }, []);
   function handleSessionDeleted(movieId: number, sessionId: number) {
     setMovies((prevMovies) =>
-      prevMovies.map((m) =>
-        m.id === movieId
-          ? {
-              ...m,
-              sessionList: m.sessionList?.filter((s) => s.id !== sessionId) || []
-            }
-          : m
-      )
+      prevMovies.map((m) => {
+        if (m.id !== movieId) return m;
+
+        const updatedMovie = {
+          ...m,
+          sessionList: m.sessionList?.filter((s) => s.id !== sessionId) || []
+        };
+
+        setSelectedMovie((prevSelected) => (prevSelected && prevSelected.id === movieId ? updatedMovie : prevSelected));
+
+        return updatedMovie;
+      })
     );
   }
 
@@ -138,9 +151,9 @@ export default function Main() {
                     <MovieRecord
                       key={movie.id}
                       movie={movie}
-                      onDetails={() => openEditModal(movie)}
+                      onEdit={() => openEditModal(movie)}
                       onDelete={() => handleDelete(movie.id)}
-                      onSessionUpdated={handleSessionsUpdated} onSessionDeleted={handleSessionDeleted}
+                      onClick={(movie) => setSelectedMovie(movie)}
                     />
                   ))}
                 </section>
@@ -153,10 +166,9 @@ export default function Main() {
                   <MovieRecord
                     key={movie.id}
                     movie={movie}
-                    onDetails={() => openEditModal(movie)}
+                    onEdit={() => openEditModal(movie)}
                     onDelete={() => handleDelete(movie.id)}
-                    onSessionUpdated={handleSessionsUpdated}
-                    onSessionDeleted={handleSessionDeleted}
+                    onClick={(movie) => setSelectedMovie(movie)}
                   />
                 ))}
               </section>
@@ -166,6 +178,22 @@ export default function Main() {
       </div>
 
       {isModalOpen && <MovieFormModal movie={editingMovie} onClose={closeModal} onSaved={handleSaved} />}
+      {selectedMovie && (
+        <MovieModal
+          movie={selectedMovie}
+          onClose={handleModalClose}
+          onDelete={(id) => {
+            handleDelete(id);
+            handleModalClose();
+          }}
+          onEdit={(movie) => {
+            openEditModal(movie);
+            handleModalClose();
+          }}
+          onSessionUpdated={handleSessionsUpdated}
+          onSessionDeleted={handleSessionDeleted}
+        />
+      )}
     </main>
   );
 }

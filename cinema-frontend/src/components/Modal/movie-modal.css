@@ -64,6 +64,10 @@
   margin-top: 1rem;
 }
 
+.session-info-disabled {
+  cursor: default;
+}
+
 @media (max-width: 768px) {
   .modal-poster {
     margin: 0 auto;
