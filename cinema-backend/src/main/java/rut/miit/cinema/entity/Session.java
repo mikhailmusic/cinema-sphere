@@ -56,9 +56,6 @@ public class Session extends BaseEntity {
         if (startTime == null) {
             throw new ValidationException("Start time cannot be null.");
         }
-        if (startTime.isBefore(LocalDateTime.now())) {
-            throw new ValidationException("Start time cannot be in the past.");
-        }
         this.startTime = startTime;
     }
 

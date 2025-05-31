@@ -46,6 +46,15 @@
   gap: 0.5rem;
 }
 
+.modal-header-left .icon {
+  color: var(--link-color-alt);
+}
+
+.modal-header-right .icon {
+  color: var(--link-color-alt);
+}
+
+
 .modal-header-left {
   left: 0.5rem;
 }

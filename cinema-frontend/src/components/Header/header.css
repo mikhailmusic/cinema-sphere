@@ -32,11 +32,11 @@
 
 .menu-toggle {
   display: none;
-  background: none;
-  border: none;
   cursor: pointer;
-  height: 2rem;
-  width: 2rem;
+  color: var(--link-color-alt)
+}
+
+.menu-toggle .icon {
   color: var(--link-color-alt)
 }
 
