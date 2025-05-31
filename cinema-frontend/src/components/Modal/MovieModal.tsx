@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { formatDuration, formatDateTime } from "../../utils/dateUtils";
 import BaseModal from "./base/BaseModal";
-import { addSession, updateSession, getImageUrl } from "../../api";
+import { addSession, updateSession, deleteSession, getImageUrl } from "../../api";
 import Pencil from "../../assets/icons/Pencil";
 import Trash from "../../assets/icons/Trash";
 import type { MovieDto, SessionDto, SessionAddDto } from "../../api/types";
@@ -15,9 +15,10 @@ interface MovieModalProps {
   onEdit: (movie: MovieDto) => void;
   onDelete: (movieId: number) => void;
   onSessionUpdated: (movieId: number, updatedSession: SessionDto) => void;
+  onSessionDeleted: (movieId: number, sessionId: number) => void;
 }
 
-export default function MovieModal({ movie, onClose, onEdit, onDelete, onSessionUpdated }: MovieModalProps) {
+export default function MovieModal({ movie, onClose, onEdit, onDelete, onSessionUpdated, onSessionDeleted }: MovieModalProps) {
   const posterUrl = getImageUrl(movie.image);
   const sortedSessions = movie.sessionList
     ? [...movie.sessionList].sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())
@@ -58,6 +59,17 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
     } catch (error) {
       console.error(error);
       alert("Ошибка при сохранении сеанса");
+    }
+  };
+  const handleDeleteSession = async (sessionId: number) => {
+    if (!window.confirm("Удалить этот сеанс?")) return;
+
+    try {
+      await deleteSession(sessionId);
+      onSessionDeleted(movie.id, sessionId);
+    } catch (error) {
+      console.error(error);
+      alert("Ошибка при удалении сеанса");
     }
   };
 
@@ -103,7 +115,11 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
         </div>
       </section>
 
-      {movie.description && <section aria-label="Описание"><p>{movie.description}</p></section>}
+      {movie.description && (
+        <section aria-label="Описание">
+          <p>{movie.description}</p>
+        </section>
+      )}
 
       <section className="modal-sessions">
         <div className="session-add">
@@ -140,18 +156,22 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
                   }}
                   className="session-info"
                 >
-                  <p className="session-row">
+                  <div className="session-row">
                     <span className="session-left">
                       {index + 1}. {formatDateTime(session.startTime)}
                     </span>
                     <span className="session-right">
                       {session.hallName}, мест: {session.seatCount}
                     </span>
-                  </p>
-                  <p>
-                    Статус сеанса: <strong>{getSessionStatusLabel(session.status)}</strong>
-                  </p>
+                  </div>
+                  <div className="session-row">
+                    <p>
+                      Статус сеанса: <strong>{getSessionStatusLabel(session.status)}</strong>
+                    </p>
+                    {isMovieEditable && <Button onClick={() => handleDeleteSession(session.id)} variant="danger">Удалить</Button>}
+                  </div>
                 </article>
+
                 {editingSessionId === session.id && isMovieEditable && (
                   <SessionFormInline
                     movieId={movie.id}

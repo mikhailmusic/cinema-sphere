@@ -87,6 +87,18 @@ export default function Main() {
       })
     );
   }, []);
+  function handleSessionDeleted(movieId: number, sessionId: number) {
+    setMovies((prevMovies) =>
+      prevMovies.map((m) =>
+        m.id === movieId
+          ? {
+              ...m,
+              sessionList: m.sessionList?.filter((s) => s.id !== sessionId) || []
+            }
+          : m
+      )
+    );
+  }
 
   const statusSections: { [key in MovieDto["movieStatus"]]: string } = {
     ACTIVE: "Сейчас в прокате",
@@ -120,7 +132,7 @@ export default function Main() {
               if (sectionMovies.length === 0) return null;
 
               return (
-                <section key={statusKey} id={statusKey.toLowerCase()}  className="record-group">
+                <section key={statusKey} id={statusKey.toLowerCase()} className="record-group">
                   <h3>{title}</h3>
                   {sectionMovies.map((movie) => (
                     <MovieRecord
@@ -128,7 +140,7 @@ export default function Main() {
                       movie={movie}
                       onDetails={() => openEditModal(movie)}
                       onDelete={() => handleDelete(movie.id)}
-                      onSessionUpdated={handleSessionsUpdated}
+                      onSessionUpdated={handleSessionsUpdated} onSessionDeleted={handleSessionDeleted}
                     />
                   ))}
                 </section>
@@ -144,6 +156,7 @@ export default function Main() {
                     onDetails={() => openEditModal(movie)}
                     onDelete={() => handleDelete(movie.id)}
                     onSessionUpdated={handleSessionsUpdated}
+                    onSessionDeleted={handleSessionDeleted}
                   />
                 ))}
               </section>

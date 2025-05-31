@@ -143,6 +143,7 @@ public class MovieServiceImpl implements MovieService {
     private MovieDto convertToDto(Movie movie) {
         List<SessionDto> sessionDtos = movie.getSessionList() != null
                 ? movie.getSessionList().stream()
+                .filter(s -> s.getStatus() != SessionStatus.DELETED)
                 .map(s -> new SessionDto(s.getId(), s.getStartTime(), s.getStatus().name(), s.getHall().getName(), s.getHall().getSeatCount()))
                 .collect(Collectors.toList())
                 : List.of();

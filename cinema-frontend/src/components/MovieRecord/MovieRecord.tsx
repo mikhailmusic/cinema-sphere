@@ -10,9 +10,10 @@ type MovieRecordProps = {
   onDelete: (movie: MovieDto) => void;
   onDetails: (movie: MovieDto) => void;
   onSessionUpdated: (movieId: number, session: SessionDto) => void;
+    onSessionDeleted: (movieId: number, sessionId: number) => void;
 };
 
-export default function MovieRecord({ movie, onDelete, onDetails, onSessionUpdated }: MovieRecordProps) {
+export default function MovieRecord({ movie, onDelete, onDetails, onSessionUpdated, onSessionDeleted }: MovieRecordProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const posterUrl = getImageUrl(movie.image);
 
@@ -79,6 +80,7 @@ export default function MovieRecord({ movie, onDelete, onDetails, onSessionUpdat
             setIsModalOpen(false);
           }}
           onSessionUpdated={onSessionUpdated}
+          onSessionDeleted={onSessionDeleted}
         />
       )}
     </>
