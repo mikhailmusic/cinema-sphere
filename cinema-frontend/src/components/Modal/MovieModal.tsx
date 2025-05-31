@@ -76,7 +76,7 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
         </>
       }
     >
-      <div className="modal-info">
+      <section className="modal-info">
         <img src={posterUrl} alt={movie.title} className="modal-poster" />
         <div className="modal-details">
           <p>
@@ -101,11 +101,11 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
             <strong>Статус:</strong> {movieStatusOptions.find((opt) => opt.value === movie.movieStatus)?.label || movie.movieStatus}
           </p>
         </div>
-      </div>
+      </section>
 
-      {movie.description && <p className="modal-description">{movie.description}</p>}
+      {movie.description && <section aria-label="Описание"><p>{movie.description}</p></section>}
 
-      <div className="modal-sessions">
+      <section className="modal-sessions">
         <div className="session-add">
           <h3>Сеансы</h3>
           {isMovieEditable && (
@@ -128,7 +128,7 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
           <ul className="session-list">
             {sortedSessions.map((session, index) => (
               <li key={session.id} className={`session-item session-status-${session.status.toLowerCase()}`}>
-                <div
+                <article
                   onClick={() => {
                     if (!isMovieEditable) return;
                     if (editingSessionId === session.id) {
@@ -151,7 +151,7 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
                   <p>
                     Статус сеанса: <strong>{getSessionStatusLabel(session.status)}</strong>
                   </p>
-                </div>
+                </article>
                 {editingSessionId === session.id && isMovieEditable && (
                   <SessionFormInline
                     movieId={movie.id}
@@ -164,7 +164,7 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
             ))}
           </ul>
         )}
-      </div>
+      </section>
     </BaseModal>
   );
 }

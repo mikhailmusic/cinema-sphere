@@ -20,9 +20,9 @@ export default function BaseModal({ onClose, children, title, leftContent, right
 
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay" onClick={onClose} role="dialog" aria-labelledby="modal-title">
       <div className="modal-window" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
+        <header className="modal-header">
           <div className="modal-header-left">{leftContent}</div>
 
           {title && (
@@ -38,9 +38,9 @@ export default function BaseModal({ onClose, children, title, leftContent, right
               </button>
             )}
           </div>
-        </div>
+        </header>
 
-        <div className="modal-body">{children}</div>
+        <main  className="modal-body">{children}</main>
       </div>
     </div>
   );

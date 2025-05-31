@@ -4,6 +4,7 @@
   max-width: 1200px;
   width: 70%;
   background-color: var(--background-color);
+  margin-bottom: 10rem;
 }
 
 .movie-list {
