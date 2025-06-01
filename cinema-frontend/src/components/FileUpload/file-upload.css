@@ -10,8 +10,13 @@
 }
 
 .file-name {
-  font-size: 1rem;
   color: var(--text-color);
+  display: inline-block;
+  max-width: 20rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
 }
 
 .image-preview-wrapper {

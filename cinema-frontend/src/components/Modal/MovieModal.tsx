@@ -117,7 +117,7 @@ export default function MovieModal({ movie, onClose, onEdit, onDelete, onSession
 
       {movie.description && (
         <section aria-label="Описание">
-          <p>{movie.description}</p>
+          <p className="movie-description">{movie.description}</p>
         </section>
       )}
 
