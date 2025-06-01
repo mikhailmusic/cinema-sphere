@@ -1,6 +1,6 @@
 import React from 'react';
 
-type ButtonProps = {
+interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'danger' | 'success';
 onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   children: React.ReactNode;

@@ -31,7 +31,7 @@ export default function MovieFormModal({ movie = null, onClose, onSaved }: Props
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | string | null>(null);
 
-  const isArchived = movieStatus === "ARCHIVED";
+  const isArchived = movieStatus ===  MovieStatus.ARCHIVED;
 
 
   const [errors, setErrors] = useState<{

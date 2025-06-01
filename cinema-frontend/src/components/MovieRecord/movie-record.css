@@ -15,10 +15,6 @@
   box-shadow: 0 4px 8px rgba(79, 88, 158, 0.3);
 }
 
-.movie-title {
-  font-size: var(--font-size-large);
-}
-
 .movie-info {
   display: flex;
   gap: 1rem;
@@ -52,9 +48,6 @@
 .movie-record.planned {
   background: linear-gradient(90deg, rgba(242, 176, 30, 0.15), var(--background-color-hover));
   border-color: var(--warning-color);
-  transition:
-    background-color 0.3s ease,
-    border-color 0.3s ease;
 }
 
 .movie-record.planned:hover {
